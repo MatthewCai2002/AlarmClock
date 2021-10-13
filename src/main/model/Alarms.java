@@ -1,20 +1,26 @@
 package model;
 
+/*
+
+Represents a list of all alarms set
+
+*/
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Alarms {
 
-    private List<Alarm> alarms;
+    private List<AlarmClock> alarms;
 
     public Alarms() {
-        alarms = new ArrayList<Alarm>();
+        alarms = new ArrayList<AlarmClock>();
     }
 
 
     // MODIFIES: this
     // EFFECTS: add given alarm to list of alarms
-    public void addAlarm(Alarm alarm) {
+    public void addAlarm(AlarmClock alarm) {
         // stub
     }
 
@@ -27,10 +33,10 @@ public class Alarms {
 
 
 
-    // REQUIRES: i > 0 or i = 0
+    // REQUIRES: index >= 0
     // EFFECTS: returns alarm at given index
-    public Alarm getAlarm(int i) {
-        return new Alarm();
+    public AlarmClock getAlarm(int index) {
+        return new AlarmClock(0,0); // stub
     }
 
     // EFFECTS: prints all alarms in the list

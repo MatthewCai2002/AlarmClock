@@ -1,4 +1,7 @@
 package puzzles;
 
-public class MathPuzzle implements Puzzle{
+
+public class MathPuzzle {
+
+
 }
