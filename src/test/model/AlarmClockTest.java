@@ -10,7 +10,7 @@ class AlarmClockTest {
 
     @BeforeEach
     public void setup() {
-        testAlarmClock = new AlarmClock(18, 0);
+        testAlarmClock = new AlarmClock("alarm1",18, 0);
     }
 
     @Test
@@ -23,66 +23,39 @@ class AlarmClockTest {
     }
 
     @Test
-    public void testTickSeconds() {
-        testAlarmClock.tick(18, 0, 1);
-        String currentTime = testAlarmClock.getTime();
-
-        assertEquals("18:0:1", currentTime);
-
-        testAlarmClock.tick(18, 0, 60);
-        currentTime = testAlarmClock.getTime();
-
-        assertEquals("18:0:60", currentTime);
-
-        testAlarmClock.tick(18, 0, 30);
-        currentTime = testAlarmClock.getTime();
-
-        assertEquals("18:0:30", currentTime);
-    }
-
-    @Test
     public void testTickMinutes() {
-        testAlarmClock.tick(18,1, 0);
+        // seconds
+        testAlarmClock.tick(0);
         String currentTime = testAlarmClock.getTime();
-        assertEquals("18:1:0", currentTime);
+        assertEquals("0:0:0", currentTime);
 
-        testAlarmClock.tick(18, 60, 0);
+        testAlarmClock.tick(30);
         currentTime = testAlarmClock.getTime();
-        assertEquals("18:60:60", currentTime);
+        assertEquals("0:0:30", currentTime);
 
-        testAlarmClock.tick(18, 30, 0);
+        // minutes
+        testAlarmClock.tick(30);
         currentTime = testAlarmClock.getTime();
-        assertEquals("18:30:30", currentTime);
-    }
+        assertEquals("0:1:0", currentTime);
 
-    @Test
-    public void testTickHours() {
-        testAlarmClock.tick(19, 0, 0);
-        String currentTime = testAlarmClock.getTime();
-        assertEquals("19:0:0", currentTime);
-
-        testAlarmClock.tick(24, 0, 0);
+        testAlarmClock.tick(3480);
         currentTime = testAlarmClock.getTime();
-        assertEquals("24:0:0", currentTime);
+        assertEquals("0:59:0", currentTime);
 
-        testAlarmClock.tick(0, 0, 0);
+        // hours
+        testAlarmClock.tick(60);
+        currentTime = testAlarmClock.getTime();
+        assertEquals("1:0:0", currentTime);
+
+        testAlarmClock.tick(7200);
+        currentTime = testAlarmClock.getTime();
+        assertEquals("3:0:0", currentTime);
+
+        // reset
+        testAlarmClock.tick(75600);
         currentTime = testAlarmClock.getTime();
         assertEquals("0:0:0", currentTime);
-    }
 
-    @Test
-    public void testSetClockTimeMinutes() {
-        testAlarmClock.setClockTime(0,0);
-        String time = testAlarmClock.getTime();
-        assertEquals("0:0:0", time);
-
-        testAlarmClock.setClockTime(0,30);
-        time = testAlarmClock.getTime();
-        assertEquals("0:30:0", time);
-
-        testAlarmClock.setClockTime(0,60);
-        time = testAlarmClock.getTime();
-        assertEquals("0:60:0", time);
     }
 
     @Test
@@ -111,6 +84,7 @@ class AlarmClockTest {
         assertTrue(toggled);
     }
 
+    // rewrite this test
     @Test
     public void testToggleRinging() {
         testAlarmClock.toggleRinging();
@@ -122,4 +96,9 @@ class AlarmClockTest {
         assertFalse(toggled);
     }
 
+    @Test
+    public void testGetName() {
+        String name = testAlarmClock.getName();
+        assertEquals("alarm1", name);
+    }
 }
