@@ -12,6 +12,7 @@ public class MathPuzzle {
     private int solution;
     private String problem;
 
+    // constructs a new math puzzle with a predetermined problem and solution
     public MathPuzzle() {
         solved = false;
         solution = 2;

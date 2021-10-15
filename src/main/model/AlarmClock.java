@@ -3,8 +3,7 @@ package model;
 /*
 
 Represents an alarm clock with time in hours, minutes, seconds,
-alarm hours and minutes a puzzle to solve, name, ringing state,
-and active state.
+alarm hours and minutes a puzzle to solve, name, and ringing state.
 
 */
 

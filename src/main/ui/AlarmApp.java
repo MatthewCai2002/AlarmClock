@@ -18,11 +18,11 @@ public class AlarmApp {
     private Scanner input;
 
 
+    // based off of TellerApp class in TellerApp
     // MODIFIES: this
     // EFFECTS: runs the alarm app and instantiates a new list of alarms
     public AlarmApp() {
         runAlarm();
-
     }
 
     // based off of TellerApp class in TellerApp

@@ -12,6 +12,7 @@ import java.util.List;
 public class Alarms {
     private List<AlarmClock> alarms;        // list of alarms
 
+    // EFFECTS: constrcucts a new ArrayList of AlarmCLocks
     public Alarms() {
         alarms = new ArrayList<>();
     }

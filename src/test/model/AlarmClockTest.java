@@ -134,11 +134,13 @@ class AlarmClockTest {
         assertTrue(name.equals("cheese"));
     }
 
-//    @Test
-//    public void testGetAlarmClockHoursMinutes() {
-//        testAlarmClock.tick(1200);
-//        String time = testAlarmClock.getClockTimeHoursMinutes();
-//
-//        assertTrue(time.equals("0:20"));
-//    }
+    @Test
+    public void testGetRinging() {
+        boolean toggled;
+
+        testAlarmClock.tick(600);
+        testAlarmClock.toggleRinging();
+        toggled = testAlarmClock.getRinging();
+        assertFalse(toggled);
+    }
 }
