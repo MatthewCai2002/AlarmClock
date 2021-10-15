@@ -89,24 +89,24 @@ class AlarmClockTest {
     @Test
     public void testToggleRinging() {
 
-        // time 0:0
+        // clock time 0:0
         testAlarmClock.toggleRinging();
         Boolean toggled = testAlarmClock.getRinging();
         assertFalse(toggled);
 
-        // time 0:10
+        // clock time 0:10
         testAlarmClock.tick(600);
         testAlarmClock.toggleRinging();
         toggled = testAlarmClock.getRinging();
         assertFalse(toggled);
 
-        // time 18:0
+        // clock time 18:0
         testAlarmClock.tick(64200);
         testAlarmClock.toggleRinging();
         toggled = testAlarmClock.getRinging();
         assertTrue(toggled);
 
-        // time 18:10
+        // clock time 18:10
         testAlarmClock.tick(600);
         testAlarmClock.toggleRinging();
         toggled = testAlarmClock.getRinging();

@@ -40,4 +40,10 @@ public class AlarmsTest {
         testAlarms.removeAlarmName("alarm2");
         assertEquals(0, testAlarms.getAlarms().size());
     }
+
+    @Test
+    public void testGetAlarms() {
+        assertEquals(3, testAlarms.getAlarms().size());
+
+    }
 }
