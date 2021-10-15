@@ -10,10 +10,6 @@ and active state.
 
 import puzzles.MathPuzzle;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-
 public class AlarmClock {
     private static final int SECONDS_PER_MINUTE = 60;   // seconds in a minute
     private static final int MINUTES_PER_HOUR = 60;     // minutes in a hour
@@ -93,6 +89,8 @@ public class AlarmClock {
         alarmTimeMinutes = minutes;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the name of alarm clock to given name
     public void setName(String name) {
         this.name = name;
     }
@@ -105,16 +103,6 @@ public class AlarmClock {
     // EFFECTS: returns the set alarm time in the form Hours:Minutes:0
     public String getAlarmTime() {
         return alarmTimeHours + ":" + alarmTimeMinutes + ":0";
-    }
-
-    // EFFECTS: returns the hour the alarm was set for
-    public int getAlarmTimeHours() {
-        return alarmTimeHours;
-    }
-
-    // EFFECTS: returns the minute the alarm was set for
-    public int getAlarmTimeMinutes() {
-        return alarmTimeMinutes;
     }
 
     // EFFECTS: returns the puzzle needed to turn off the alarm

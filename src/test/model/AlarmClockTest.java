@@ -16,15 +16,12 @@ class AlarmClockTest {
 
     @Test
     public void testConstructor() {
-        int alarmTimeHours = testAlarmClock.getAlarmTimeHours();
-        int alarmTimeMinutes = testAlarmClock.getAlarmTimeMinutes();
-
-        assertEquals(0, alarmTimeMinutes);
-        assertEquals(18, alarmTimeHours);
+        String alarmTime = testAlarmClock.getAlarmTime();
+        assertTrue(alarmTime.equals("18:0:0"));
     }
 
     @Test
-    public void testTickMinutes() {
+    public void testTick() {
         // seconds
         testAlarmClock.tick(0);
         String currentTime = testAlarmClock.getClockTime();
@@ -52,7 +49,7 @@ class AlarmClockTest {
         currentTime = testAlarmClock.getClockTime();
         assertEquals("3:0:0", currentTime);
 
-        // reset
+        // reset to 0
         testAlarmClock.tick(75600);
         currentTime = testAlarmClock.getClockTime();
         assertEquals("0:0:0", currentTime);
