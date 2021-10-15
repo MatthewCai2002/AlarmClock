@@ -38,11 +38,14 @@ public class AlarmsTest {
     public void testRemoveAlarmName() {
         testAlarms.removeAlarmName("alarm3");
         assertFalse(testAlarms.getAlarms().contains(alarm3));
+
+        testAlarms.removeAlarmName("cheese");
+        assertEquals(2, testAlarms.getAlarms().size());
     }
 
     @Test
-    public void testGetAlarm() {
-        AlarmClock grabbedAlarm = testAlarms.getAlarm(2);
+    public void testGetAlarmIndex() {
+        AlarmClock grabbedAlarm = testAlarms.getAlarmIndex(2);
         assertEquals(alarm3, grabbedAlarm);
     }
 

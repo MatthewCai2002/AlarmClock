@@ -4,8 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import puzzles.MathPuzzle;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MathPuzzleTest {
     MathPuzzle testPuzzle;
@@ -24,5 +23,11 @@ public class MathPuzzleTest {
         testPuzzle.solvePuzzle(2);
         solved = testPuzzle.isSolved();
         assertTrue(solved);
+    }
+
+    @Test
+    public void testGetProblem() {
+        String problem = testPuzzle.getProblem();
+        assertEquals("1 + 1", problem);
     }
 }

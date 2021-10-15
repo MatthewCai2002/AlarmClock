@@ -1,5 +1,10 @@
 package puzzles;
 
+/*
+
+represents a single math puzzle with a solution, and whether or not it has been solved
+
+ */
 
 public class MathPuzzle {
 
