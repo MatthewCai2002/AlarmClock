@@ -36,7 +36,7 @@ public class JsonReader {
     private String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 
-        try (Stream<String> stream = Files.lines( Paths.get(source), StandardCharsets.UTF_8)) {
+        try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s));
         }
 
@@ -56,7 +56,7 @@ public class JsonReader {
     // EFFECTS: parses thingies from JSON object and adds them to workroom
     public void addAlarms(Alarms alarms, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("Alarms");
-        for (Object json : jsonArray ) {
+        for (Object json : jsonArray) {
             JSONObject nextAlarm = (JSONObject) json;
             addAlarm(alarms, nextAlarm);
         }

@@ -13,7 +13,7 @@ import persistence.Writable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Alarms implements Writable{
+public class Alarms implements Writable {
     private List<AlarmClock> alarms;        // list of alarms
 
     // EFFECTS: constrcucts a new ArrayList of AlarmCLocks
