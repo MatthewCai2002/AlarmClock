@@ -1,0 +1,17 @@
+{"Alarms": [
+    {
+        "AlarmTimeMinutes": 0,
+        "name": "Cheese",
+        "AlarmTimeHours": 2
+    },
+    {
+        "AlarmTimeMinutes": 32,
+        "name": "Caviar",
+        "AlarmTimeHours": 1
+    },
+    {
+        "AlarmTimeMinutes": 55,
+        "name": "Ckjsdf",
+        "AlarmTimeHours": 6
+    }
+]}

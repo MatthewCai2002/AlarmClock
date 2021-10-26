@@ -4,18 +4,27 @@ package ui;
 
 import model.AlarmClock;
 import model.Alarms;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 import puzzles.MathPuzzle;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class AlarmApp {
+    private static final String JSON_STORE = "./data/Alarms/Alarms.json";
+
     private Boolean ringing;
     private MathPuzzle puzzle;
     private AlarmClock globalAlarm;
     private Alarms alarms;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
 
     // based off of TellerApp class in TellerApp
@@ -55,16 +64,23 @@ public class AlarmApp {
         System.out.println("\n ===== Shutting Down =====");
     }
 
-    // based off of TellerApp class in TellerApp
+    // based off of TellerApp class in TellerApp and JsonSerializationDemo
     // MODIFIES: this
     // EFFECTS: initializes alarms
     public void init() {
         ringing = false;
         puzzle = new MathPuzzle();
-        globalAlarm = new AlarmClock("Current Time", 0,0);
-        alarms = new Alarms();
+        globalAlarm = new AlarmClock("Current Time", 0, 0);
         input = new Scanner(System.in);
         input.useDelimiter("\n");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+        try {
+            alarms = jsonReader.read();
+            System.out.println("Loaded alarms from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 
     // based off of TellerApp class in TellerApp
@@ -102,8 +118,13 @@ public class AlarmApp {
     // MODIFIES: this
     // EFFECTS: adds an alarm clock to list of alarms
     public void doAddAlarm() {
-        AlarmClock alarm = new AlarmClock("",0,0);
-        doAddAlarmHours(alarm);
+        AlarmClock alarm = new AlarmClock("", 0, 0);
+        try {
+            doAddAlarmHours(alarm);
+        } catch (InputMismatchException e) {
+            System.out.println("sorry that wasn't an integer try again");
+            doAddAlarm();
+        }
     }
 
     // MODIFIES: alarm
@@ -115,12 +136,18 @@ public class AlarmApp {
         int hour = input.nextInt();
         if ((0 <= hour) && (hour <= 24)) {
             alarm.setAlarmTimeHours(hour);
-            doAddAlarmMinutes(alarm);
+            try {
+                doAddAlarmMinutes(alarm);
+            } catch (InputMismatchException e) {
+                System.out.println("sorry that wasn't an integer try again");
+            }
         } else {
             System.out.println("sorry that's an invalid time, try again");
             doAddAlarmHours(alarm);
         }
     }
+
+
 
     // MODIFIES: alarm
     // EFFECTS: if 0 <= input minutes <= 60 then alarm minutes is set to input minutes
@@ -138,6 +165,7 @@ public class AlarmApp {
         }
     }
 
+
     // MODIFIES: alarm
     // EFFECTS: sets name of alarm to input name
     public void doAddAlarmName(AlarmClock alarm) {
@@ -145,6 +173,7 @@ public class AlarmApp {
         String name = input.next();
         alarm.setName(name);
         alarms.addAlarm(alarm);
+        doSaveAlarms();
     }
 
 
@@ -156,17 +185,21 @@ public class AlarmApp {
             System.out.println("\t" + ac.getName() + ": " + ac.getAlarmTime());
         }
         String remove = input.next();
+        int counter = 0;
         for (AlarmClock ac : alarms.getAlarms()) {
             String name = ac.getName();
-            if (remove.equals(name)) {
-                alarms.removeAlarmName(remove);
+            if (name.equals(remove)) {
+                alarms.getAlarms().remove(ac);
                 System.out.println("successfully removed " + remove);
                 break;
-            } else {
+            }
+            counter++;
+            if (counter == alarms.getAlarms().size()) {
                 System.out.println("Sorry that's not a valid alarm, try again");
                 doRemoveAlarm();
             }
         }
+        doSaveAlarms();
     }
 
     // MODIFIES: this
@@ -226,5 +259,18 @@ public class AlarmApp {
         } else {
             System.out.println("oops that's not quite right, try again");
         }
+    }
+
+    public void doSaveAlarms() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(alarms);
+            jsonWriter.close();
+            System.out.println("saved all your alarms to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("unable to write to file in " + JSON_STORE);
+        }
+
+
     }
 }

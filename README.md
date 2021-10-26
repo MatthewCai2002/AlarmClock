@@ -1,14 +1,3 @@
-# My Personal Project
-
-## A subtitle
-
-A *bulleted* list:
-- item 1
-- item 2
-- item 3
-
-An example of text with **bold** and *italic* fonts.  Note that the IntelliJ markdown previewer doesn't seem to render
-the bold and italic fonts correctly but they will appear correctly on GitHub.
 # My Persistent Alarm Clock Project
 
 ## What it does
@@ -51,3 +40,6 @@ my morning habit.
 - as a user, I want to be able to solve a problem to turn off my alarm
 - As a user, I would like to be able to delete alarms
 - As a user, I would like to be able to set an alarm at any time of day
+- As a user, I would like to be able to save the alarms I add
+- As a user, I would like to be able to load my alarms from a file and start where I left off
+- 

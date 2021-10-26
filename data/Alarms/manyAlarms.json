@@ -1,0 +1,18 @@
+{
+  "Alarms": [{
+    "AlarmTimeMinutes": 0,
+    "name": "Cheese",
+    "AlarmTimeHours": 1
+  },
+    {
+      "AlarmTimeMinutes": 30,
+      "name": "Bread",
+      "AlarmTimeHours": 1
+  }, {
+      "AlarmTimeMinutes": 45,
+      "name": "dffS",
+      "AlarmTimeHours": 12
+    }
+
+  ]
+}

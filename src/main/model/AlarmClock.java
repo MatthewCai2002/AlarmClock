@@ -7,9 +7,13 @@ alarm hours and minutes a puzzle to solve, name, and ringing state.
 
 */
 
+import org.json.JSONObject;
+import persistence.Writable;
 import puzzles.MathPuzzle;
 
-public class AlarmClock {
+import javax.jws.WebResult;
+
+public class AlarmClock implements Writable {
     private static final int SECONDS_PER_MINUTE = 60;   // seconds in a minute
     private static final int MINUTES_PER_HOUR = 60;     // minutes in a hour
     private static final int HOURS_PER_DAY = 24;        // hours in a day
@@ -23,7 +27,7 @@ public class AlarmClock {
     private MathPuzzle puzzle;          // the puzzle required to solve to turn off alarm
     private String name;                // alarm name
 
-    // REQUIRES: 0 < time < 24
+    // REQUIRES: 0 <= hours <= 24 && 0 <= minutes <= 60
     // EFFECTS: constructs an alarm clock with given alarm time and name
     public AlarmClock(String name, int hours, int minutes) {
         clockTimeHours = 0;
@@ -119,4 +123,13 @@ public class AlarmClock {
         return name;
     }
 
+    // from JsonSerializationDemo
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("AlarmTimeHours", alarmTimeHours);
+        json.put("AlarmTimeMinutes", alarmTimeMinutes);
+        return json;
+    }
 }
