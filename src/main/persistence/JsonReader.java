@@ -6,6 +6,7 @@ import model.AlarmClock;
 import model.Alarms;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import puzzles.MathPuzzle;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -69,7 +70,13 @@ public class JsonReader {
         String alarmName = jsonObject.getString("name");
         int timeHours = jsonObject.getInt("AlarmTimeHours");
         int timeMinutes = jsonObject.getInt("AlarmTimeMinutes");
+        int clockTimeHours = jsonObject.getInt("ClockTimeHours");
+        int clockTimeMinutes = jsonObject.getInt("ClockTimeMinutes");
+        int clockTimeSeconds = jsonObject.getInt("ClockTimeSeconds");
         AlarmClock alarm = new AlarmClock(alarmName, timeHours, timeMinutes);
+        alarm.setClockTimeHours(clockTimeHours);
+        alarm.setClockTimeMinutes(clockTimeMinutes);
+        alarm.setClockTimeSeconds(clockTimeSeconds);
         alarms.addAlarm(alarm);
     }
 

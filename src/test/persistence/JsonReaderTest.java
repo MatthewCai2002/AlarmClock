@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.CouldNotFindClockException;
 import model.AlarmClock;
 import model.Alarms;
 import org.junit.jupiter.api.Test;
@@ -37,12 +38,14 @@ public class JsonReaderTest {
         JsonReader jsonReader = new JsonReader("./data/Alarms/manyAlarms.json");
         try {
             Alarms alarms = jsonReader.read();
-            AlarmClock alarmBread = alarms.findAlarmClockByName("Bread");
-            assertEquals(3,alarms.getAlarms().size());
+            AlarmClock alarmBread = alarms.findAlarmClockByName("asdf");
+            assertEquals(2,alarms.getAlarms().size());
             assertTrue(alarms.getAlarms().contains(alarmBread));
-
+            assertTrue(alarmBread.getClockTime().equals("2:2:7"));
         } catch (IOException e) {
             fail("couldn't read from file");
+        } catch (CouldNotFindClockException e) {
+            fail("couldn't find clock");
         }
     }
 }

@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.CouldNotFindClockException;
 import model.AlarmClock;
 import model.Alarms;
 import org.junit.jupiter.api.Test;
@@ -58,8 +59,12 @@ public class JsonWriterTest {
 
             assertEquals(3, alarms.getAlarms().size());
             assertTrue(alarms.getAlarms().contains(ac3));
+            AlarmClock testAlarm = alarms.findAlarmClockByName("Ckjsdf");
+            assertTrue(testAlarm.getAlarmTime().equals("6:55:0"));
         } catch (IOException e) {
-
+            fail("was not expecting an exception");
+        } catch (CouldNotFindClockException e) {
+            fail("was not expecting an exception");
         }
     }
 }

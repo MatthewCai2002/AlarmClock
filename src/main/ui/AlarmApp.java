@@ -56,6 +56,7 @@ public class AlarmApp {
             command = command.toLowerCase();
 
             if (command.equals("4.") || command.equals("4") || command.equals("quit")) {
+                doSaveAlarms();
                 keepGoing = false;
             } else {
                 processCommandGeneralMenu(command);
@@ -261,6 +262,7 @@ public class AlarmApp {
         }
     }
 
+    // EFFECTS: saves alarms to file
     public void doSaveAlarms() {
         try {
             jsonWriter.open();
@@ -270,7 +272,6 @@ public class AlarmApp {
         } catch (FileNotFoundException e) {
             System.out.println("unable to write to file in " + JSON_STORE);
         }
-
 
     }
 }

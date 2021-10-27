@@ -98,6 +98,27 @@ public class AlarmClock implements Writable {
         this.name = name;
     }
 
+    // REQUIRES: 0 <= hours <= 24
+    // MODIFIES: this
+    // EFFECTS: sets clock hours to given hours
+    public void setClockTimeHours(int hours) {
+        clockTimeHours = hours;
+    }
+
+    // REQUIRES: 0 <= minutes <= 60
+    // MODIFIES: this
+    // EFFECTS: sets clock minutes to given minutes
+    public void setClockTimeMinutes(int minutes) {
+        clockTimeMinutes = minutes;
+    }
+
+    // REQUIRES: 0 <= seconds <= 60
+    // MODIFIES: this
+    // EFFECTS: sets clock seconds to given seconds
+    public void setClockTimeSeconds(int seconds) {
+        clockTimeSeconds = seconds;
+    }
+
     // EFFECTS: returns the current time in the form Hours:Minutes:Seconds
     public String getClockTime() {
         return clockTimeHours + ":" + clockTimeMinutes + ":" + clockTimeSeconds;
@@ -130,6 +151,9 @@ public class AlarmClock implements Writable {
         json.put("name", name);
         json.put("AlarmTimeHours", alarmTimeHours);
         json.put("AlarmTimeMinutes", alarmTimeMinutes);
+        json.put("ClockTimeHours", clockTimeHours);
+        json.put("ClockTimeMinutes", clockTimeMinutes);
+        json.put("ClockTimeSeconds", clockTimeSeconds);
         return json;
     }
 }

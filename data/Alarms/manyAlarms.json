@@ -1,17 +1,20 @@
 {
-  "Alarms": [{
-    "AlarmTimeMinutes": 0,
-    "name": "Cheese",
-    "AlarmTimeHours": 1
-  },
+  "Alarms": [
     {
-      "AlarmTimeMinutes": 30,
-      "name": "Bread",
-      "AlarmTimeHours": 1
-  }, {
-      "AlarmTimeMinutes": 45,
-      "name": "dffS",
-      "AlarmTimeHours": 12
+      "ClockTimeHours": 1,
+      "AlarmTimeMinutes": 5,
+      "name": "fdas",
+      "ClockTimeSeconds": 3,
+      "ClockTimeMinutes": 1,
+      "AlarmTimeHours": 7
+    },
+    {
+      "ClockTimeHours": 2,
+      "AlarmTimeMinutes": 1,
+      "name": "asdf",
+      "ClockTimeSeconds": 7,
+      "ClockTimeMinutes": 2,
+      "AlarmTimeHours": 9
     }
 
   ]

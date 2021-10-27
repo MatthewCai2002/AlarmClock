@@ -6,6 +6,7 @@ Represents a list of alarms
 
 */
 
+import exceptions.CouldNotFindClockException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -40,16 +41,17 @@ public class Alarms implements Writable {
         }
     }
 
-    // REQUIRES: name is in alarms
-    // EFFECTS: returns the alarm clock with given name
-    public AlarmClock findAlarmClockByName(String name) {
+    // EFFECTS: if name is in alarms returns the alarm clock with given name
+    //          otherwise throws CouldNotFindClockException
+    public AlarmClock findAlarmClockByName(String name) throws CouldNotFindClockException {
         AlarmClock foundClock = new AlarmClock("",0,0);
         for (AlarmClock ac : alarms) {
             if (ac.getName().equals(name)) {
                 foundClock = ac;
+                return foundClock;
             }
         }
-        return foundClock;
+        throw new CouldNotFindClockException();
     }
 
     // EFFECTS: returns alarms

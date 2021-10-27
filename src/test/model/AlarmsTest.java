@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.CouldNotFindClockException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,5 +46,44 @@ public class AlarmsTest {
     public void testGetAlarms() {
         assertEquals(3, testAlarms.getAlarms().size());
 
+    }
+
+    @Test
+    public void testFindAlarmClockByNameInAlarms() {
+        try {
+            AlarmClock alarm2 = testAlarms.findAlarmClockByName("alarm2");
+            assertTrue(alarm2.getAlarmTime().equals("2:2:0"));
+        } catch (CouldNotFindClockException e) {
+            fail("did not expect exception");
+        }
+    }
+
+    @Test
+    public void testFindAlarmClockByNameNotInAlarms() {
+        testAlarms.removeAlarmName("alarm1");
+        testAlarms.removeAlarmName("alarm2");
+        testAlarms.removeAlarmName("alarm3");
+
+        try {
+            AlarmClock alarm4 = testAlarms.findAlarmClockByName("alarm4");
+            fail("expected exception");
+        } catch (CouldNotFindClockException e) {
+            // expected
+        }
+
+    }
+
+    @Test
+    public void testFindAlarmClockByNameEmptyAlarms() {
+        testAlarms.removeAlarmName("alarm1");
+        testAlarms.removeAlarmName("alarm2");
+        testAlarms.removeAlarmName("alarm3");
+
+        try {
+            AlarmClock alarm4 = testAlarms.findAlarmClockByName("alarm2");
+            fail("expected exception");
+        } catch (CouldNotFindClockException e) {
+            // expected
+        }
     }
 }
