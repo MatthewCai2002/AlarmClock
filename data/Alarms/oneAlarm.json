@@ -1,0 +1,8 @@
+{
+  "ClockTimeHours": 1,
+  "AlarmTimeMinutes": 0,
+  "name": "Current Time",
+  "ClockTimeSeconds": 2,
+  "ClockTimeMinutes": 3,
+  "AlarmTimeHours": 0
+}

@@ -26,10 +26,35 @@ public class JsonReader {
     // from JsonSerializationDemo
     // EFFECTS: reads alarms from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public Alarms read() throws IOException {
+    public Alarms readAlarms() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseAlarms(jsonObject);
+    }
+
+    // from JsonSerializationDemo
+    // EFFECTS: reads alarm clock from file and returns it;
+    // throws IOException if an error occurs reading data from file
+    public AlarmClock readAlarmClock() throws IOException {
+        String jsonData = readFile(source);
+        JSONObject jsonObject = new JSONObject(jsonData);
+        return parseAlarm(jsonObject);
+    }
+
+    // from jsonSerializationDemo
+    // EFFECTS: parses alarm clock from JSON object and returns it
+    private AlarmClock parseAlarm(JSONObject jsonObject) {
+        String alarmName = jsonObject.getString("name");
+        int timeHours = jsonObject.getInt("AlarmTimeHours");
+        int timeMinutes = jsonObject.getInt("AlarmTimeMinutes");
+        int clockTimeHours = jsonObject.getInt("ClockTimeHours");
+        int clockTimeMinutes = jsonObject.getInt("ClockTimeMinutes");
+        int clockTimeSeconds = jsonObject.getInt("ClockTimeSeconds");
+        AlarmClock alarm = new AlarmClock(alarmName,timeHours,timeMinutes);
+        alarm.setClockTimeHours(clockTimeHours);
+        alarm.setClockTimeMinutes(clockTimeMinutes);
+        alarm.setClockTimeSeconds(clockTimeSeconds);
+        return alarm;
     }
 
     // from JsonSerializationDemo
@@ -45,7 +70,7 @@ public class JsonReader {
     }
 
     // from jsonSerializationDemo
-    // EFFECTS: parses workroom from JSON object and returns it
+    // EFFECTS: parses alarms from JSON object and returns it
     private Alarms parseAlarms(JSONObject jsonObject) {
         Alarms alarms = new Alarms();
         addAlarms(alarms, jsonObject);
@@ -54,7 +79,7 @@ public class JsonReader {
 
     // from JsonSerializationDemo
     // MODIFIES: alarms
-    // EFFECTS: parses thingies from JSON object and adds them to workroom
+    // EFFECTS: parses  from JSON object and adds them to workroom
     public void addAlarms(Alarms alarms, JSONObject jsonObject) {
         JSONArray jsonArray = jsonObject.getJSONArray("Alarms");
         for (Object json : jsonArray) {
@@ -64,8 +89,8 @@ public class JsonReader {
     }
 
     // inspired by JsonSerializationDemo
-    // MODIFIES: wr
-    // EFFECTS: parses thingy from JSON object and adds it to workroom
+    // MODIFIES: alarms
+    // EFFECTS: parses an alarm from JSON object and adds it to alarms
     private void addAlarm(Alarms alarms, JSONObject jsonObject) {
         String alarmName = jsonObject.getString("name");
         int timeHours = jsonObject.getInt("AlarmTimeHours");

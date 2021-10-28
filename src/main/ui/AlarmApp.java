@@ -16,15 +16,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class AlarmApp {
-    private static final String JSON_STORE = "./data/Alarms/Alarms.json";
+    private static final String JSON_STORE_ALARMS = "./data/Alarms/Alarms.json";
+    private static final String JSON_STORE_ALARM = "./data/Alarms/Alarm.json";
 
     private Boolean ringing;
     private MathPuzzle puzzle;
     private AlarmClock globalAlarm;
     private Alarms alarms;
     private Scanner input;
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
+    private JsonWriter jsonWriterAlarms;
+    private JsonWriter jsonWriterAlarm;
+    private JsonReader jsonReaderAlarms;
+    private JsonReader jsonReaderAlarm;
 
 
     // based off of TellerApp class in TellerApp
@@ -50,13 +53,12 @@ public class AlarmApp {
                 ringAlarm();
                 checkSolved();
             }
-
-
             command = input.next();
             command = command.toLowerCase();
 
             if (command.equals("4.") || command.equals("4") || command.equals("quit")) {
                 doSaveAlarms();
+                doSaveAlarm();
                 keepGoing = false;
             } else {
                 processCommandGeneralMenu(command);
@@ -71,16 +73,19 @@ public class AlarmApp {
     public void init() {
         ringing = false;
         puzzle = new MathPuzzle();
-        globalAlarm = new AlarmClock("Current Time", 0, 0);
         input = new Scanner(System.in);
         input.useDelimiter("\n");
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
+        jsonWriterAlarms = new JsonWriter(JSON_STORE_ALARMS);
+        jsonWriterAlarm = new JsonWriter(JSON_STORE_ALARM);
+        jsonReaderAlarms = new JsonReader(JSON_STORE_ALARMS);
+        jsonReaderAlarm = new JsonReader(JSON_STORE_ALARM);
         try {
-            alarms = jsonReader.read();
-            System.out.println("Loaded alarms from " + JSON_STORE);
+            alarms = jsonReaderAlarms.readAlarms();
+            globalAlarm = jsonReaderAlarm.readAlarmClock();
+            System.out.println("Loaded alarms from " + JSON_STORE_ALARMS);
+            System.out.println("Loaded current time from" + JSON_STORE_ALARM);
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
+            System.out.println("Unable to read from file: " + JSON_STORE_ALARMS);
         }
     }
 
@@ -214,6 +219,7 @@ public class AlarmApp {
             System.out.println("Sorry that's an invalid time try again");
             doPassTime();
         }
+        doSaveAlarm();
     }
 
     // EFFECT: rings alarm when current time reaches an alarm time
@@ -265,13 +271,27 @@ public class AlarmApp {
     // EFFECTS: saves alarms to file
     public void doSaveAlarms() {
         try {
-            jsonWriter.open();
-            jsonWriter.write(alarms);
-            jsonWriter.close();
-            System.out.println("saved all your alarms to " + JSON_STORE);
+            jsonWriterAlarms.open();
+            jsonWriterAlarms.write(alarms);
+            jsonWriterAlarms.close();
+            System.out.println("saved all your alarms to " + JSON_STORE_ALARMS);
         } catch (FileNotFoundException e) {
-            System.out.println("unable to write to file in " + JSON_STORE);
+            System.out.println("unable to write to file in " + JSON_STORE_ALARMS);
         }
 
     }
+
+    // EFFECTS: saves global alarm to file
+    public void doSaveAlarm() {
+        try {
+            jsonWriterAlarm.open();
+            jsonWriterAlarm.writeAlarm(globalAlarm);
+            jsonWriterAlarm.close();
+            System.out.println("saved all your current time to " + JSON_STORE_ALARM);
+        } catch (FileNotFoundException e) {
+            System.out.println("unable to write to file in " + JSON_STORE_ALARM);
+        }
+
+    }
+
 }

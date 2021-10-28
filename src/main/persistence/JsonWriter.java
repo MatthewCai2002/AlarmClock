@@ -1,5 +1,6 @@
 package persistence;
 
+import model.AlarmClock;
 import model.Alarms;
 import org.json.JSONObject;
 
@@ -31,6 +32,14 @@ public class JsonWriter {
     // EFFECTS: writes JSON representation of alarms to file
     public void write(Alarms alarms) {
         JSONObject json = alarms.toJson();
+        saveToFile(json.toString(TAB));
+    }
+
+    // from JsonSerializationDemo
+    // MODIFIES: this
+    // EFFECTS: writes JSON representation of an alarm to file
+    public void writeAlarm(AlarmClock alarm) {
+        JSONObject json = alarm.toJson();
         saveToFile(json.toString(TAB));
     }
 
