@@ -287,7 +287,7 @@ public class AlarmApp {
             jsonWriterAlarm.open();
             jsonWriterAlarm.writeAlarm(globalAlarm);
             jsonWriterAlarm.close();
-            System.out.println("saved all your current time to " + JSON_STORE_ALARM);
+            System.out.println("saved the current time to " + JSON_STORE_ALARM);
         } catch (FileNotFoundException e) {
             System.out.println("unable to write to file in " + JSON_STORE_ALARM);
         }
