@@ -2,7 +2,7 @@ package ui;
 
 // alarm application
 
-import model.AlarmClock;
+import model.Alarm;
 import model.Alarms;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -10,24 +10,28 @@ import puzzles.MathPuzzle;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.util.*;
 
 public class AlarmApp {
     private static final String JSON_STORE_ALARMS = "./data/Alarms/Alarms.json";
-    private static final String JSON_STORE_ALARM = "./data/Alarms/Alarm.json";
 
+    // Alarm
     private Boolean ringing;
     private MathPuzzle puzzle;
-    private AlarmClock globalAlarm;
     private Alarms alarms;
     private Scanner input;
+
+    // Clock
+    private Clock clock;
+    private Date time;
+    private String formattedTime;
+    private SimpleDateFormat timeFormat;
+
+    // JSON Readers and Writers
     private JsonWriter jsonWriterAlarms;
-    private JsonWriter jsonWriterAlarm;
     private JsonReader jsonReaderAlarms;
-    private JsonReader jsonReaderAlarm;
 
 
     // based off of TellerApp class in TellerApp
@@ -58,7 +62,6 @@ public class AlarmApp {
 
             if (command.equals("4.") || command.equals("4") || command.equals("quit")) {
                 doSaveAlarms();
-                doSaveAlarm();
                 keepGoing = false;
             } else {
                 processCommandGeneralMenu(command);
@@ -71,39 +74,62 @@ public class AlarmApp {
     // MODIFIES: this
     // EFFECTS: initializes alarms
     public void init() {
-        ringing = false;
-        puzzle = new MathPuzzle();
+        initAlarm();
+        initClock();
+        initReadWrite();
         input = new Scanner(System.in);
         input.useDelimiter("\n");
-        jsonWriterAlarms = new JsonWriter(JSON_STORE_ALARMS);
-        jsonWriterAlarm = new JsonWriter(JSON_STORE_ALARM);
-        jsonReaderAlarms = new JsonReader(JSON_STORE_ALARMS);
-        jsonReaderAlarm = new JsonReader(JSON_STORE_ALARM);
         try {
             alarms = jsonReaderAlarms.readAlarms();
-            globalAlarm = jsonReaderAlarm.readAlarmClock();
             System.out.println("Loaded alarms from " + JSON_STORE_ALARMS);
-            System.out.println("Loaded current time from" + JSON_STORE_ALARM);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE_ALARMS);
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initializes app clock
+    public void initClock() {
+        clock = Clock.systemDefaultZone();
+        timeFormat = new SimpleDateFormat("HH:mm:ss");
+        formattedTime = "";
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initializes JSON readers and writers
+    public void initReadWrite() {
+        jsonWriterAlarms = new JsonWriter(JSON_STORE_ALARMS);
+        jsonReaderAlarms = new JsonReader(JSON_STORE_ALARMS);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initializes alarm
+    public void initAlarm() {
+        ringing = false;
+        puzzle = new MathPuzzle();
     }
 
     // based off of TellerApp class in TellerApp
     // EFFECTS: shows a menu with all current alarms and 4 options
     public void menuAlarms() {
         System.out.println("====================");
-        System.out.println(globalAlarm.getName() + ": " + globalAlarm.getClockTime());
+        printTime();
         System.out.println("Current alarms:");
-        for (AlarmClock ac : alarms.getAlarms()) {
+        for (Alarm ac : alarms.getAlarms()) {
             System.out.println("\t" + ac.getName() + ": " + ac.getAlarmTime());
         }
         System.out.println("\n what do you want to do?");
         System.out.println("\t 1. add an alarm");
         System.out.println("\t 2. remove an alarm");
-        System.out.println("\t 3. pass time");
         System.out.println("\t 4. quit");
     }
+
+    public void printTime() {
+        time = Date.from(clock.instant());
+        formattedTime = timeFormat.format(time);
+        System.out.println("Current Time: " + formattedTime);
+    }
+
 
     // based off of TellerApp class in TellerApp
     // MODIFIES: this
@@ -113,8 +139,6 @@ public class AlarmApp {
             doAddAlarm();
         } else if (command.equals("2.") || command.equals("2") || command.equals("remove")) {
             doRemoveAlarm();
-        } else if (command.equals("3.") || command.equals("3") || command.equals("pass time")) {
-            doPassTime();
         } else {
             System.out.println("INVALID CHOICE CHOOSE AGAIN");
         }
@@ -124,12 +148,15 @@ public class AlarmApp {
     // MODIFIES: this
     // EFFECTS: adds an alarm clock to list of alarms
     public void doAddAlarm() {
-        AlarmClock alarm = new AlarmClock("", 0, 0);
-        try {
-            doAddAlarmHours(alarm);
-        } catch (InputMismatchException e) {
-            System.out.println("sorry that wasn't an integer try again");
-            doAddAlarm();
+        Alarm alarm = new Alarm("", 0, 0);
+        boolean adding = true;
+        while (adding) {
+            try {
+                doAddAlarmHours(alarm);
+                adding = false;
+            } catch (InputMismatchException e) {
+                System.out.println("sorry that wasn't an integer try again");
+            }
         }
     }
 
@@ -137,16 +164,12 @@ public class AlarmApp {
     // EFFECTS: if 0 <= input hour <= 24 then alarm hour is set to input hour
     //          and progress to the next phase
     //              else input time again
-    public void doAddAlarmHours(AlarmClock alarm) {
+    public void doAddAlarmHours(Alarm alarm) throws InputMismatchException {
         System.out.println("\n what hours do you want for your alarm?");
         int hour = input.nextInt();
         if ((0 <= hour) && (hour <= 24)) {
             alarm.setAlarmTimeHours(hour);
-            try {
-                doAddAlarmMinutes(alarm);
-            } catch (InputMismatchException e) {
-                System.out.println("sorry that wasn't an integer try again");
-            }
+            doAddAlarmMinutes(alarm);
         } else {
             System.out.println("sorry that's an invalid time, try again");
             doAddAlarmHours(alarm);
@@ -159,7 +182,7 @@ public class AlarmApp {
     // EFFECTS: if 0 <= input minutes <= 60 then alarm minutes is set to input minutes
     //          and progress to the next phase
     //              else input time again
-    public void doAddAlarmMinutes(AlarmClock alarm) {
+    public void doAddAlarmMinutes(Alarm alarm) throws InputMismatchException {
         System.out.println("\n what minutes do you want for your alarm?");
         int minutes = input.nextInt();
         if ((0 <= minutes) && (minutes <= 60)) {
@@ -174,7 +197,7 @@ public class AlarmApp {
 
     // MODIFIES: alarm
     // EFFECTS: sets name of alarm to input name
-    public void doAddAlarmName(AlarmClock alarm) {
+    public void doAddAlarmName(Alarm alarm) {
         System.out.println("\n what name do you want for your alarm?");
         String name = input.next();
         alarm.setName(name);
@@ -186,40 +209,29 @@ public class AlarmApp {
     // MODIFIES: this
     // EFFECTS: removes an alarm clock from the list and reloads menu
     public void doRemoveAlarm() {
-        System.out.println("which alarm do you want to remove?");
-        for (AlarmClock ac : alarms.getAlarms()) {
-            System.out.println("\t" + ac.getName() + ": " + ac.getAlarmTime());
-        }
-        String remove = input.next();
-        int counter = 0;
-        for (AlarmClock ac : alarms.getAlarms()) {
-            String name = ac.getName();
-            if (name.equals(remove)) {
-                alarms.getAlarms().remove(ac);
-                System.out.println("successfully removed " + remove);
-                break;
+        boolean removing = true;
+        while (removing) {
+            System.out.println("which alarm do you want to remove?");
+            for (Alarm ac : alarms.getAlarms()) {
+                System.out.println("\t" + ac.getName() + ": " + ac.getAlarmTime());
             }
-            counter++;
-            if (counter == alarms.getAlarms().size()) {
-                System.out.println("Sorry that's not a valid alarm, try again");
-                doRemoveAlarm();
+            String remove = input.next();
+            int counter = 0;
+            for (Alarm ac : alarms.getAlarms()) {
+                String name = ac.getName();
+                if (name.equals(remove)) {
+                    alarms.getAlarms().remove(ac);
+                    System.out.println("successfully removed " + remove);
+                    removing = false;
+                    break;
+                }
+                counter++;
+                if (counter == alarms.getAlarms().size()) {
+                    System.out.println("Sorry that's not a valid alarm, try again");
+                }
             }
         }
         doSaveAlarms();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: passes the time input time in seconds
-    public void doPassTime() {
-        System.out.println("fast forward by how many seconds?");
-        int passTime = input.nextInt();
-        if (passTime >= 0) {
-            globalAlarm.tick(passTime);
-        } else {
-            System.out.println("Sorry that's an invalid time try again");
-            doPassTime();
-        }
-        doSaveAlarm();
     }
 
     // EFFECT: rings alarm when current time reaches an alarm time
@@ -241,13 +253,11 @@ public class AlarmApp {
 
     // EFFECTS: checks whether the current time is the same as an alarm time
     //          if yes then makes the alarm ring
-    //              otherwise there it does not
+    //              otherwise there does nothing
     public void checkIfRing() {
-        for (AlarmClock ac : alarms.getAlarms()) {
-            if (ac.getAlarmTime().equals(globalAlarm.getClockTime())) {
-                ringing = true;
-            } else {
-                ringing = false;
+        for (Alarm ac : alarms.getAlarms()) {
+            if (ac.getAlarmTime().equals(formattedTime)) {
+                ringAlarm();
             }
         }
     }
@@ -277,19 +287,6 @@ public class AlarmApp {
             System.out.println("saved all your alarms to " + JSON_STORE_ALARMS);
         } catch (FileNotFoundException e) {
             System.out.println("unable to write to file in " + JSON_STORE_ALARMS);
-        }
-
-    }
-
-    // EFFECTS: saves global alarm to file
-    public void doSaveAlarm() {
-        try {
-            jsonWriterAlarm.open();
-            jsonWriterAlarm.writeAlarm(globalAlarm);
-            jsonWriterAlarm.close();
-            System.out.println("saved the current time to " + JSON_STORE_ALARM);
-        } catch (FileNotFoundException e) {
-            System.out.println("unable to write to file in " + JSON_STORE_ALARM);
         }
 
     }

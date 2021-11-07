@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Alarms implements Writable {
-    private List<AlarmClock> alarms;        // list of alarms
+    private List<Alarm> alarms;        // list of alarms
 
     // EFFECTS: constrcucts a new ArrayList of AlarmCLocks
     public Alarms() {
@@ -24,7 +24,7 @@ public class Alarms implements Writable {
 
     // MODIFIES: this
     // EFFECTS: add given alarm to list of alarms
-    public void addAlarm(AlarmClock alarm) {
+    public void addAlarm(Alarm alarm) {
         alarms.add(alarm);
     }
 
@@ -33,7 +33,7 @@ public class Alarms implements Writable {
     //          if there are multiple alarms with the same name,
     //              it removes the first occurrence
     public void removeAlarmName(String name) {
-        for (AlarmClock ac : alarms) {
+        for (Alarm ac : alarms) {
             if (ac.getName().equals(name)) {
                 alarms.remove(ac);
                 break;
@@ -43,9 +43,9 @@ public class Alarms implements Writable {
 
     // EFFECTS: if name is in alarms returns the alarm clock with given name
     //          otherwise throws CouldNotFindClockException
-    public AlarmClock findAlarmClockByName(String name) throws CouldNotFindClockException {
-        AlarmClock foundClock = new AlarmClock("",0,0);
-        for (AlarmClock ac : alarms) {
+    public Alarm findAlarmClockByName(String name) throws CouldNotFindClockException {
+        Alarm foundClock = new Alarm("",0,0);
+        for (Alarm ac : alarms) {
             if (ac.getName().equals(name)) {
                 foundClock = ac;
                 return foundClock;
@@ -55,7 +55,7 @@ public class Alarms implements Writable {
     }
 
     // EFFECTS: returns alarms
-    public List<AlarmClock> getAlarms() {
+    public List<Alarm> getAlarms() {
         return alarms;
     }
 
@@ -70,7 +70,7 @@ public class Alarms implements Writable {
     // EFFECTS: returns alarms in the list of alarms as a JSON array
     public JSONArray toJsonArray() {
         JSONArray jsonArray = new JSONArray();
-        for (AlarmClock ac : alarms) {
+        for (Alarm ac : alarms) {
             jsonArray.put(ac.toJson());
         }
         return jsonArray;

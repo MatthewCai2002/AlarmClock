@@ -8,16 +8,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AlarmsTest {
     Alarms testAlarms;
-    AlarmClock alarm1;
-    AlarmClock alarm2;
-    AlarmClock alarm3;
+    Alarm alarm1;
+    Alarm alarm2;
+    Alarm alarm3;
 
     @BeforeEach
     public void setup() {
         testAlarms = new Alarms();
-        alarm1 = new AlarmClock("alarm1",1,0);
-        alarm2 = new AlarmClock("alarm2",2,2);
-        alarm3 = new AlarmClock("alarm3",3,3);
+        alarm1 = new Alarm("alarm1",1,0);
+        alarm2 = new Alarm("alarm2",2,2);
+        alarm3 = new Alarm("alarm3",3,3);
         testAlarms.addAlarm(alarm1);
         testAlarms.addAlarm(alarm2);
         testAlarms.addAlarm(alarm3);
@@ -51,7 +51,7 @@ public class AlarmsTest {
     @Test
     public void testFindAlarmClockByNameInAlarms() {
         try {
-            AlarmClock alarm2 = testAlarms.findAlarmClockByName("alarm2");
+            Alarm alarm2 = testAlarms.findAlarmClockByName("alarm2");
             assertTrue(alarm2.getAlarmTime().equals("2:2:0"));
         } catch (CouldNotFindClockException e) {
             fail("did not expect exception");
@@ -65,7 +65,7 @@ public class AlarmsTest {
         testAlarms.removeAlarmName("alarm3");
 
         try {
-            AlarmClock alarm4 = testAlarms.findAlarmClockByName("alarm4");
+            Alarm alarm4 = testAlarms.findAlarmClockByName("alarm4");
             fail("expected exception");
         } catch (CouldNotFindClockException e) {
             // expected
@@ -80,7 +80,7 @@ public class AlarmsTest {
         testAlarms.removeAlarmName("alarm3");
 
         try {
-            AlarmClock alarm4 = testAlarms.findAlarmClockByName("alarm2");
+            Alarm alarm4 = testAlarms.findAlarmClockByName("alarm2");
             fail("expected exception");
         } catch (CouldNotFindClockException e) {
             // expected

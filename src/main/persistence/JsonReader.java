@@ -2,11 +2,10 @@ package persistence;
 
 // represents a reader that reads alarms from JSON data stored in a file
 
-import model.AlarmClock;
+import model.Alarm;
 import model.Alarms;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import puzzles.MathPuzzle;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -32,28 +31,13 @@ public class JsonReader {
         return parseAlarms(jsonObject);
     }
 
-    // from JsonSerializationDemo
-    // EFFECTS: reads alarm clock from file and returns it;
-    // throws IOException if an error occurs reading data from file
-    public AlarmClock readAlarmClock() throws IOException {
-        String jsonData = readFile(source);
-        JSONObject jsonObject = new JSONObject(jsonData);
-        return parseAlarm(jsonObject);
-    }
-
     // from jsonSerializationDemo
     // EFFECTS: parses alarm clock from JSON object and returns it
-    private AlarmClock parseAlarm(JSONObject jsonObject) {
+    private Alarm parseAlarm(JSONObject jsonObject) {
         String alarmName = jsonObject.getString("name");
         int timeHours = jsonObject.getInt("AlarmTimeHours");
         int timeMinutes = jsonObject.getInt("AlarmTimeMinutes");
-        int clockTimeHours = jsonObject.getInt("ClockTimeHours");
-        int clockTimeMinutes = jsonObject.getInt("ClockTimeMinutes");
-        int clockTimeSeconds = jsonObject.getInt("ClockTimeSeconds");
-        AlarmClock alarm = new AlarmClock(alarmName,timeHours,timeMinutes);
-        alarm.setClockTimeHours(clockTimeHours);
-        alarm.setClockTimeMinutes(clockTimeMinutes);
-        alarm.setClockTimeSeconds(clockTimeSeconds);
+        Alarm alarm = new Alarm(alarmName,timeHours,timeMinutes);
         return alarm;
     }
 
@@ -95,13 +79,7 @@ public class JsonReader {
         String alarmName = jsonObject.getString("name");
         int timeHours = jsonObject.getInt("AlarmTimeHours");
         int timeMinutes = jsonObject.getInt("AlarmTimeMinutes");
-        int clockTimeHours = jsonObject.getInt("ClockTimeHours");
-        int clockTimeMinutes = jsonObject.getInt("ClockTimeMinutes");
-        int clockTimeSeconds = jsonObject.getInt("ClockTimeSeconds");
-        AlarmClock alarm = new AlarmClock(alarmName, timeHours, timeMinutes);
-        alarm.setClockTimeHours(clockTimeHours);
-        alarm.setClockTimeMinutes(clockTimeMinutes);
-        alarm.setClockTimeSeconds(clockTimeSeconds);
+        Alarm alarm = new Alarm(alarmName, timeHours, timeMinutes);
         alarms.addAlarm(alarm);
     }
 

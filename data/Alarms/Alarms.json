@@ -1,26 +1,22 @@
 {"Alarms": [
     {
-        "ClockTimeHours": 0,
+        "AlarmTimeMinutes": 12,
+        "name": "sadf",
+        "AlarmTimeHours": 23
+    },
+    {
         "AlarmTimeMinutes": 2,
-        "name": "fdas",
-        "ClockTimeSeconds": 0,
-        "ClockTimeMinutes": 0,
-        "AlarmTimeHours": 2
-    },
-    {
-        "ClockTimeHours": 0,
-        "AlarmTimeMinutes": 3,
         "name": "asdf",
-        "ClockTimeSeconds": 0,
-        "ClockTimeMinutes": 0,
-        "AlarmTimeHours": 2
+        "AlarmTimeHours": 3
     },
     {
-        "ClockTimeHours": 0,
-        "AlarmTimeMinutes": 3,
-        "name": "fdscx",
-        "ClockTimeSeconds": 0,
-        "ClockTimeMinutes": 0,
-        "AlarmTimeHours": 4
+        "AlarmTimeMinutes": 7,
+        "name": "wert",
+        "AlarmTimeHours": 5
+    },
+    {
+        "AlarmTimeMinutes": 2,
+        "name": "child",
+        "AlarmTimeHours": 2
     }
 ]}
