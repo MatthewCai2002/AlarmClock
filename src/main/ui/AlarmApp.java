@@ -2,8 +2,10 @@ package ui;
 
 // alarm application
 
+import exceptions.InvalidDifficultyException;
 import model.Alarm;
 import model.Alarms;
+import model.PuzzleManager;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import puzzles.MathPuzzle;
@@ -19,7 +21,6 @@ public class AlarmApp {
 
     // Alarm
     private Boolean ringing;
-    private MathPuzzle puzzle;
     private Alarms alarms;
     private Scanner input;
 
@@ -33,6 +34,9 @@ public class AlarmApp {
     private JsonWriter jsonWriterAlarms;
     private JsonReader jsonReaderAlarms;
 
+    // Puzzle
+    private PuzzleManager puzzleManager;
+    private MathPuzzle puzzle;
 
     // based off of TellerApp class in TellerApp
     // MODIFIES: this
@@ -106,7 +110,7 @@ public class AlarmApp {
     // EFFECTS: initializes alarm
     public void initAlarm() {
         ringing = false;
-        puzzle = new MathPuzzle();
+        puzzleManager = new PuzzleManager();
     }
 
     // based off of TellerApp class in TellerApp
@@ -121,6 +125,7 @@ public class AlarmApp {
         System.out.println("\n what do you want to do?");
         System.out.println("\t 1. add an alarm");
         System.out.println("\t 2. remove an alarm");
+        System.out.println("\t 3. set puzzle difficulty");
         System.out.println("\t 4. quit");
     }
 
@@ -139,8 +144,22 @@ public class AlarmApp {
             doAddAlarm();
         } else if (command.equals("2.") || command.equals("2") || command.equals("remove")) {
             doRemoveAlarm();
+        } else if (command.equals("3.") || command.equals("3") || command.equals("set")) {
+            doSetDifficulty();
         } else {
             System.out.println("INVALID CHOICE CHOOSE AGAIN");
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the difficulty of puzzle to given difficulty
+    private void doSetDifficulty() {
+        System.out.println("\n do you want easy or medium difficulty?");
+        String difficulty = input.next();
+        try {
+            puzzleManager.setPuzzle(difficulty);
+        } catch (InvalidDifficultyException e) {
+            System.out.println("sorry that was an invalid difficulty");
         }
     }
 
@@ -156,6 +175,7 @@ public class AlarmApp {
                 adding = false;
             } catch (InputMismatchException e) {
                 System.out.println("sorry that wasn't an integer try again");
+                break;
             }
         }
     }

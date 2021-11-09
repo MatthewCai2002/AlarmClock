@@ -14,6 +14,19 @@ public class EasyMathPuzzleTest {
         testPuzzle = new EasyMathPuzzle();
     }
 
+    @Test
+    public void testConstructor() {
+        String problem = testPuzzle.getProblem();
+        int num1 = testPuzzle.getNum1();
+        int num2 = testPuzzle.getNum2();
+        int solution = testPuzzle.getCorrectSolution();
+        System.out.println(problem);
+        System.out.println(solution);
+        if (0 <= num1 && num1 < 50 && 0 <= num2 && num2 < 50){
+            // expected
+        }
+    }
+
     // no idea how i'm supposed to test this
     @Test
     public void testGenRandomPuzzle() {

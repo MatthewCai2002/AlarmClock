@@ -11,13 +11,10 @@ import org.json.JSONObject;
 import persistence.Writable;
 import puzzles.MathPuzzle;
 
-import javax.jws.WebResult;
-
 public class Alarm implements Writable {
     private int alarmTimeHours;         // the hours the alarm is set for
     private int alarmTimeMinutes;       // the minutes the alarm is set for
     private Boolean ringing;            // the current ringing state of the alarm
-    private MathPuzzle puzzle;          // the puzzle required to solve to turn off alarm
     private String name;                // alarm name
 
     // REQUIRES: 0 <= hours <= 24 && 0 <= minutes <= 60
@@ -26,7 +23,6 @@ public class Alarm implements Writable {
         ringing = false;
         alarmTimeHours = hours;
         alarmTimeMinutes = minutes;
-        puzzle = new MathPuzzle();
         this.name = name;
     }
 
@@ -53,11 +49,6 @@ public class Alarm implements Writable {
     // EFFECTS: returns the set alarm time in the form Hours:Minutes:0
     public String getAlarmTime() {
         return alarmTimeHours + ":" + alarmTimeMinutes + ":0";
-    }
-
-    // EFFECTS: returns the puzzle needed to turn off the alarm
-    public MathPuzzle getPuzzle() {
-        return puzzle;
     }
 
     // EFFECTS: returns the ringing state of the alarm

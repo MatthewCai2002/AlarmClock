@@ -57,14 +57,6 @@ class AlarmTest {
     }
 
     @Test
-    public void testGetPuzzle() {
-        MathPuzzle puzzle = testAlarm.getPuzzle();
-        String problem = puzzle.getProblem();
-        assertEquals("1 + 1", problem);
-
-    }
-
-    @Test
     public void testSetName() {
         testAlarm.setName("cheese");
         String name = testAlarm.getName();
