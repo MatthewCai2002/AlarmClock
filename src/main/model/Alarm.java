@@ -7,6 +7,7 @@ alarm hours and minutes a puzzle to solve, name, and ringing state.
 
 */
 
+import exceptions.InvalidTimeException;
 import org.json.JSONObject;
 import persistence.Writable;
 import puzzles.MathPuzzle;
@@ -26,18 +27,28 @@ public class Alarm implements Writable {
         this.name = name;
     }
 
-    // REQUIRES: 0 <= hours <= 24
     // MODIFIES: this
-    // EFFECTS: sets the current time to given hours
-    public void setAlarmTimeHours(int hours) {
-        alarmTimeHours = hours;
+    // EFFECTS: if 0 <= hours <= 24
+    //              then sets the current time to given hours
+    //          otherwise throws InvalidTimeException
+    public void setAlarmTimeHours(int hours) throws InvalidTimeException {
+        if (0 <= hours && hours <= 24) {
+            alarmTimeHours = hours;
+        } else {
+            throw new InvalidTimeException();
+        }
     }
 
-    // REQUIRES: 0 <= minutes <= 60
     // MODIFIES: this
-    // EFFECTS: sets the current time to given minutes
-    public void setAlarmTimeMinutes(int minutes) {
-        alarmTimeMinutes = minutes;
+    // EFFECTS: if 0 <= minutes <= 60
+    //              then sets the current time to given minutes
+    //          otherwise throws InvalidTimeException
+    public void setAlarmTimeMinutes(int minutes) throws InvalidTimeException {
+        if (0 <= minutes && minutes <= 60) {
+            alarmTimeMinutes = minutes;
+        } else {
+            throw new InvalidTimeException();
+        }
     }
 
     // MODIFIES: this

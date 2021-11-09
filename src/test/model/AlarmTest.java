@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.InvalidTimeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import puzzles.MathPuzzle;
@@ -22,33 +23,63 @@ class AlarmTest {
 
     @Test
     public void testSetAlarmTimeHours() {
-        testAlarm.setAlarmTimeHours(0);
-        String time = testAlarm.getAlarmTime();
-        assertEquals("0:0:0", time);
+        try {
+            testAlarm.setAlarmTimeHours(0);
+            String time = testAlarm.getAlarmTime();
+            assertEquals("0:0:0", time);
 
-        testAlarm.setAlarmTimeHours(12);
-        time = testAlarm.getAlarmTime();
-        assertEquals("12:0:0", time);
+            testAlarm.setAlarmTimeHours(12);
+            time = testAlarm.getAlarmTime();
+            assertEquals("12:0:0", time);
 
-        testAlarm.setAlarmTimeHours(24);
-        time = testAlarm.getAlarmTime();
-        assertEquals("24:0:0", time);
+            testAlarm.setAlarmTimeHours(24);
+            time = testAlarm.getAlarmTime();
+            assertEquals("24:0:0", time);
+        } catch (InvalidTimeException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testSetAlarmTimeInvalidHours() {
+        try {
+            testAlarm.setAlarmTimeHours(25);
+            fail();
+        } catch (InvalidTimeException e) {
+            // expected
+        }
     }
 
     @Test
     public void testSetAlarmTimeMinutes() {
-        testAlarm.setAlarmTimeMinutes(0);
-        String time = testAlarm.getAlarmTime();
-        assertEquals("18:0:0", time);
+        try {
+            testAlarm.setAlarmTimeMinutes(0);
+            String time = testAlarm.getAlarmTime();
+            assertEquals("18:0:0", time);
 
-        testAlarm.setAlarmTimeMinutes(30);
-        time = testAlarm.getAlarmTime();
-        assertEquals("18:30:0", time);
+            testAlarm.setAlarmTimeMinutes(30);
+            time = testAlarm.getAlarmTime();
+            assertEquals("18:30:0", time);
 
-        testAlarm.setAlarmTimeMinutes(60);
-        time = testAlarm.getAlarmTime();
-        assertEquals("18:60:0", time);
+            testAlarm.setAlarmTimeMinutes(60);
+            time = testAlarm.getAlarmTime();
+            assertEquals("18:60:0", time);
+        } catch (InvalidTimeException e) {
+            fail();
+        }
     }
+
+    @Test
+    public void testSetAlarmTimeInvalidMinutes() {
+        try {
+            testAlarm.setAlarmTimeMinutes(600);
+            fail();
+        } catch (InvalidTimeException e) {
+            // expected
+        }
+    }
+
+
 
     @Test
     public void testGetName() {

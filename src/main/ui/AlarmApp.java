@@ -3,17 +3,20 @@ package ui;
 // alarm application
 
 import exceptions.InvalidDifficultyException;
+import exceptions.InvalidTimeException;
 import model.Alarm;
 import model.Alarms;
 import model.PuzzleManager;
 import persistence.JsonReader;
 import persistence.JsonWriter;
+import puzzles.EasyMathPuzzle;
 import puzzles.MathPuzzle;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Clock;
+import java.time.Duration;
 import java.util.*;
 
 public class AlarmApp {
@@ -95,6 +98,9 @@ public class AlarmApp {
     // EFFECTS: initializes app clock
     public void initClock() {
         clock = Clock.systemDefaultZone();
+        clock = Clock.offset(clock, Duration.ofHours(11));
+        clock = Clock.offset(clock, Duration.ofMinutes(-21));
+
         timeFormat = new SimpleDateFormat("HH:mm:ss");
         formattedTime = "";
     }
@@ -111,6 +117,7 @@ public class AlarmApp {
     public void initAlarm() {
         ringing = false;
         puzzleManager = new PuzzleManager();
+        puzzle = new EasyMathPuzzle();
     }
 
     // based off of TellerApp class in TellerApp
@@ -154,12 +161,18 @@ public class AlarmApp {
     // MODIFIES: this
     // EFFECTS: sets the difficulty of puzzle to given difficulty
     private void doSetDifficulty() {
-        System.out.println("\n do you want easy or medium difficulty?");
-        String difficulty = input.next();
-        try {
-            puzzleManager.setPuzzle(difficulty);
-        } catch (InvalidDifficultyException e) {
-            System.out.println("sorry that was an invalid difficulty");
+        boolean scanning = true;
+        while (scanning) {
+            try {
+                System.out.println("\n do you want 'easy' or 'medium' difficulty?");
+                String difficulty = input.next();
+                puzzleManager.setPuzzle(difficulty);
+                puzzle = puzzleManager.getPuzzle();
+                System.out.println("difficulty set to " + difficulty);
+                scanning = false;
+            } catch (InvalidDifficultyException e) {
+                System.out.println("sorry that was an invalid difficulty");
+            }
         }
     }
 
@@ -168,14 +181,14 @@ public class AlarmApp {
     // EFFECTS: adds an alarm clock to list of alarms
     public void doAddAlarm() {
         Alarm alarm = new Alarm("", 0, 0);
-        boolean adding = true;
-        while (adding) {
+        boolean addingHours = true;
+        while (addingHours) {
             try {
                 doAddAlarmHours(alarm);
-                adding = false;
+                addingHours = false;
             } catch (InputMismatchException e) {
                 System.out.println("sorry that wasn't an integer try again");
-                break;
+                input.next();
             }
         }
     }
@@ -184,15 +197,22 @@ public class AlarmApp {
     // EFFECTS: if 0 <= input hour <= 24 then alarm hour is set to input hour
     //          and progress to the next phase
     //              else input time again
-    public void doAddAlarmHours(Alarm alarm) throws InputMismatchException {
+    public void doAddAlarmHours(Alarm alarm) {
         System.out.println("\n what hours do you want for your alarm?");
         int hour = input.nextInt();
-        if ((0 <= hour) && (hour <= 24)) {
-            alarm.setAlarmTimeHours(hour);
-            doAddAlarmMinutes(alarm);
-        } else {
-            System.out.println("sorry that's an invalid time, try again");
-            doAddAlarmHours(alarm);
+        boolean addingMinutes = true;
+        while (addingMinutes) {
+            try {
+                alarm.setAlarmTimeHours(hour);
+                doAddAlarmMinutes(alarm);
+                addingMinutes = false;
+            } catch (InvalidTimeException e) {
+                System.out.println("sorry that's an invalid time, try again");
+                doAddAlarmHours(alarm);
+            } catch (InputMismatchException e) {
+                System.out.println("sorry that wasn't an integer, try again");
+                input.next();
+            }
         }
     }
 
@@ -205,12 +225,11 @@ public class AlarmApp {
     public void doAddAlarmMinutes(Alarm alarm) throws InputMismatchException {
         System.out.println("\n what minutes do you want for your alarm?");
         int minutes = input.nextInt();
-        if ((0 <= minutes) && (minutes <= 60)) {
+        try {
             alarm.setAlarmTimeMinutes(minutes);
             doAddAlarmName(alarm);
-        } else {
+        } catch (InvalidTimeException e) {
             System.out.println("sorry that's an invalid time, try again");
-            doAddAlarmMinutes(alarm);
         }
     }
 
@@ -275,8 +294,11 @@ public class AlarmApp {
     //          if yes then makes the alarm ring
     //              otherwise there does nothing
     public void checkIfRing() {
+        timeFormat.applyPattern("HH:mm:0");
+        formattedTime = timeFormat.format(time);
         for (Alarm ac : alarms.getAlarms()) {
             if (ac.getAlarmTime().equals(formattedTime)) {
+                ringing = true;
                 ringAlarm();
             }
         }
@@ -291,8 +313,8 @@ public class AlarmApp {
         boolean solved = puzzle.isSolved();
         if (solved) {
             ringing = false;
-            System.out.println("CONGRATULATIONS YOU GOT UP!!!");
             menuAlarms();
+            System.out.println("CONGRATULATIONS YOU GOT UP!!!");
         } else {
             System.out.println("oops that's not quite right, try again");
         }
@@ -308,7 +330,5 @@ public class AlarmApp {
         } catch (FileNotFoundException e) {
             System.out.println("unable to write to file in " + JSON_STORE_ALARMS);
         }
-
     }
-
 }
