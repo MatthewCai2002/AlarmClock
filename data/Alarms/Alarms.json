@@ -6,11 +6,6 @@
     },
     {
         "AlarmTimeMinutes": 2,
-        "name": "asdf",
-        "AlarmTimeHours": 3
-    },
-    {
-        "AlarmTimeMinutes": 2,
         "name": "child",
         "AlarmTimeHours": 2
     },
@@ -18,11 +13,6 @@
         "AlarmTimeMinutes": 2,
         "name": "fdsaf",
         "AlarmTimeHours": 1
-    },
-    {
-        "AlarmTimeMinutes": 2,
-        "name": "asdf",
-        "AlarmTimeHours": 3
     },
     {
         "AlarmTimeMinutes": 4,

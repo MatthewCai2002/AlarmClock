@@ -5,6 +5,12 @@ import puzzles.EasyMathPuzzle;
 import puzzles.MathPuzzle;
 import puzzles.MediumMathPuzzle;
 
+/*
+
+represents a puzzle manager with a puzzle and difficulty.
+
+ */
+
 public class PuzzleManager {
     private static final int EASY = 0;
     private static final int MEDIUM = 1;
