@@ -98,9 +98,6 @@ public class AlarmApp {
     // EFFECTS: initializes app clock
     public void initClock() {
         clock = Clock.systemDefaultZone();
-        clock = Clock.offset(clock, Duration.ofHours(11));
-        clock = Clock.offset(clock, Duration.ofMinutes(-21));
-
         timeFormat = new SimpleDateFormat("HH:mm:ss");
         formattedTime = "";
     }

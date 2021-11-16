@@ -1,93 +1,122 @@
 package ui;
 
-import model.Alarm;
+import model.Alarms;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class AlarmAppUI extends JPanel implements ListSelectionListener {
+public class AlarmAppUI extends JFrame {
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
     private static final String ADD_ALARM = "Add Alarm";
     private static final String REMOVE_ALARM = "Remove Alarm";
     private static final String SET_DIFFICULTY = "Set Problem Difficulty";
     private static final String QUIT = "Quit";
 
-    // list and buttons
-    private JList listAlarms;
-    private DefaultListModel listAlarmsModel;
-    private JButton addButton;
-    private JButton removeButton;
-    private JButton setDifficultyButton;
-    private JButton quitButton;
+    private Alarms alarms;
+    private ClockUI clockUI;
 
-    // listeners
-    private AddAlarmListener addAlarmListener;
-    private RemoveAlarmListener removeAlarmListener;
-    private SetDifficultyListener setDifficultyListener;
-    private QuitListener quitListener;
+    private JDesktopPane desktop;
+    private JInternalFrame controlPanel;
 
-    private Alarm alarm;
-
-    // inspired by ListDemo from oracle java tutorials
-    // EFFECTS: constructs app ui with an empty default list model and initializes a list
     public AlarmAppUI() {
-        super(new BorderLayout());
+        alarms = new Alarms();
 
-        listAlarmsModel = new DefaultListModel();
+        desktop = new JDesktopPane();
+        desktop.addMouseListener(new DesktopFocusAction());
+        controlPanel = new JInternalFrame("", false, false,false,false);
+        controlPanel.setLayout(new BorderLayout());
 
-        // list and panel
-        listAlarms = new JList(listAlarmsModel);
-        listAlarms.setLayoutOrientation(JList.VERTICAL);
-        listAlarms.setVisibleRowCount(-1);
-        listAlarms.addListSelectionListener(this);
-        JScrollPane listAlarmsScrollPane = new JScrollPane();
+        setContentPane(desktop);
+        setTitle("Annoying Alarm Clock");
+        setSize(WIDTH,HEIGHT);
 
-        // addButton
-        JButton addButton = new JButton(ADD_ALARM);
-//        addAlarmListener = new AddAlarmListener(addButton);
-        addButton.setActionCommand(ADD_ALARM);
-        addButton.addActionListener(addAlarmListener);
-        addButton.setEnabled(false);
+        addButtons();
+        addClock();
 
-        // removeButton
-        JButton removeButton = new JButton(REMOVE_ALARM);
-//        removeAlarmListener = new RemoveAlarmListener();
-        removeButton.setActionCommand(REMOVE_ALARM);
-        removeButton.addActionListener(removeAlarmListener);
+        controlPanel.pack();
+        controlPanel.setVisible(true);
+        desktop.add(controlPanel);
 
-        // setDifficultyButton
-        JButton setDifficultyButton = new JButton(SET_DIFFICULTY);
-//        setDifficultyButton = new SetDifficultyListener();
-        setDifficultyButton.setActionCommand(SET_DIFFICULTY);
-        setDifficultyButton.addActionListener(setDifficultyListener);
-        setDifficultyButton.setEnabled(false);
-
-        // quitButton
-        JButton quitButton = new JButton(QUIT);
-//        QuitListener = new QuitListener();
-        quitButton.setActionCommand(QUIT);
-        quitButton.addActionListener(quitListener);
-        quitButton.setEnabled(false);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
-    // inspired by ListDemo from oracle java tutorials
-    // MODIFIES:
-    // EFFECTS:
-    @Override
-    public void valueChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting() == false) {
-            if (listAlarms.getSelectedIndex() == -1) {
-                addButton.setEnabled(false);
-                removeButton.setEnabled(false);
-                setDifficultyButton.setEnabled(false);
-                quitButton.setEnabled(false);
-            } else {
-                addButton.setEnabled(true);
-                removeButton.setEnabled(true);
-                setDifficultyButton.setEnabled(true);
-                quitButton.setEnabled(true);
-            }
+    private void addClock() {
+        clockUI = new ClockUI();
+        controlPanel.add(clockUI, BorderLayout.NORTH);
+    }
+
+    private void addButtons() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(4,1));
+        buttonPanel.add(new JButton(new AddAlarmAction()));
+        buttonPanel.add(new JButton(new RemoveAlarmAction()));
+        buttonPanel.add(new JButton(new SetDifficultyAction()));
+        buttonPanel.add(new JButton(new QuitAction()));
+
+        controlPanel.add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    // from AlarmSystem
+    private class DesktopFocusAction extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            AlarmAppUI.this.requestFocusInWindow();
         }
+    }
+
+    private class AddAlarmAction extends AbstractAction {
+        AddAlarmAction() {
+            super("Add Alarm");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO: Implement
+
+        }
+    }
+
+    private class RemoveAlarmAction extends AbstractAction {
+        RemoveAlarmAction() {
+            super("Remove Alarm");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO: Implement
+        }
+    }
+
+    private class SetDifficultyAction extends AbstractAction {
+        SetDifficultyAction() {
+            super("Set Difficulty");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO: Implement
+
+        }
+    }
+
+    private class QuitAction extends AbstractAction {
+        QuitAction() {
+            super("Quit");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO: Implement
+
+        }
+    }
+
+    public static void main(String[] args) {
+        new AlarmAppUI();
     }
 }
