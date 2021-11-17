@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 
 public class AlarmAppUI extends JFrame {
     private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
+    private static final int HEIGHT = 800;
     private static final String ADD_ALARM = "Add Alarm";
     private static final String REMOVE_ALARM = "Remove Alarm";
     private static final String SET_DIFFICULTY = "Set Problem Difficulty";
@@ -40,7 +40,9 @@ public class AlarmAppUI extends JFrame {
         controlPanel.pack();
         controlPanel.setVisible(true);
         desktop.add(controlPanel);
-
+        Dimension controlPanelSize = controlPanel.getSize();
+        controlPanel.setLocation((WIDTH - controlPanelSize.width)/2,
+                (HEIGHT - controlPanelSize.height)/2);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
