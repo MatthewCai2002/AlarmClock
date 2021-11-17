@@ -1,12 +1,16 @@
 package ui;
 
+import model.Alarm;
 import model.Alarms;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class AlarmAppUI extends JFrame {
     private static final int WIDTH = 800;
@@ -19,11 +23,20 @@ public class AlarmAppUI extends JFrame {
     private Alarms alarms;
     private ClockUI clockUI;
 
+    private JList list;
+    private DefaultListModel listModel;
+
     private JDesktopPane desktop;
     private JInternalFrame controlPanel;
 
     public AlarmAppUI() {
         alarms = new Alarms();
+        alarms.addAlarm(new Alarm("A",1,1));
+        alarms.addAlarm(new Alarm("A",1,1));
+        alarms.addAlarm(new Alarm("A",1,1));
+        alarms.addAlarm(new Alarm("A",1,1));
+        alarms.addAlarm(new Alarm("A",1,1));
+        alarms.addAlarm(new Alarm("A",1,1));
 
         desktop = new JDesktopPane();
         desktop.addMouseListener(new DesktopFocusAction());
@@ -34,6 +47,7 @@ public class AlarmAppUI extends JFrame {
         setTitle("Annoying Alarm Clock");
         setSize(WIDTH,HEIGHT);
 
+        addAlarms();
         addButtons();
         addClock();
 
@@ -41,18 +55,26 @@ public class AlarmAppUI extends JFrame {
         controlPanel.setVisible(true);
         desktop.add(controlPanel);
         Dimension controlPanelSize = controlPanel.getSize();
-        controlPanel.setLocation((WIDTH - controlPanelSize.width)/2,
-                (HEIGHT - controlPanelSize.height)/2);
+        controlPanel.setLocation((WIDTH - controlPanelSize.width)/2,(HEIGHT - controlPanelSize.height)/2);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+
     }
 
-    private void addClock() {
+    public void addAlarms() {
+        initListModel();
+        initList();
+        JScrollPane listScrollPane = new JScrollPane(list);
+        listScrollPane.setVisible(true);
+        controlPanel.add(listScrollPane, BorderLayout.CENTER);
+    }
+
+    public void addClock() {
         clockUI = new ClockUI();
         controlPanel.add(clockUI, BorderLayout.NORTH);
     }
 
-    private void addButtons() {
+    public void addButtons() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(4,1));
         buttonPanel.add(new JButton(new AddAlarmAction()));
@@ -61,6 +83,22 @@ public class AlarmAppUI extends JFrame {
         buttonPanel.add(new JButton(new QuitAction()));
 
         controlPanel.add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    public void initList() {
+        list = new JList(listModel);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setSelectedIndex(0);
+        list.addListSelectionListener(new ListListener());
+        list.setVisibleRowCount(5);
+    }
+
+    public void initListModel() {
+        listModel = new DefaultListModel();
+        for (Alarm ac : alarms.getAlarms()) {
+            String alarm = ac.getName() + ": " + ac.getAlarmTime();
+            listModel.addElement(alarm);
+        }
     }
 
     // from AlarmSystem
@@ -114,6 +152,14 @@ public class AlarmAppUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO: Implement
+
+        }
+    }
+
+    private class ListListener implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
 
         }
     }

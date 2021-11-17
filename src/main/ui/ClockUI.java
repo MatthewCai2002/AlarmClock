@@ -13,7 +13,7 @@ import javax.swing.Timer;
 
 public class ClockUI extends JPanel {
     private static final int WIDTH = 400;
-    private static final int HEIGHT = 200;
+    private static final int HEIGHT = 50;
     private static final int FONT_SIZE = 24;
 
     private JLabel clockLabel;
