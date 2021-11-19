@@ -31,16 +31,6 @@ public class JsonReader {
         return parseAlarms(jsonObject);
     }
 
-    // from jsonSerializationDemo
-    // EFFECTS: parses alarm clock from JSON object and returns it
-    private Alarm parseAlarm(JSONObject jsonObject) {
-        String alarmName = jsonObject.getString("name");
-        int timeHours = jsonObject.getInt("AlarmTimeHours");
-        int timeMinutes = jsonObject.getInt("AlarmTimeMinutes");
-        Alarm alarm = new Alarm(alarmName,timeHours,timeMinutes);
-        return alarm;
-    }
-
     // from JsonSerializationDemo
     // EFFECTS: reads source file as string and returns it
     private String readFile(String source) throws IOException {
