@@ -25,7 +25,6 @@ public class AlarmAppUI extends JFrame {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
 
-
     private Alarms alarms;
     private ClockUI clockUI;
     private PuzzleManager puzzleManager;
@@ -181,8 +180,7 @@ public class AlarmAppUI extends JFrame {
         t.start();
         puzzle.genRandomPuzzle();
         String tempSol = JOptionPane.showInputDialog(
-                controlPanel,
-                "solve " + puzzle.getProblem() + " to turn off the alarm");
+                controlPanel, "solve " + puzzle.getProblem() + " to turn off the alarm");
         try {
             int solution = Integer.parseInt(tempSol);
             checkSolved(solution);
