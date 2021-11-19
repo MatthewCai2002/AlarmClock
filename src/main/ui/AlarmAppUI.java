@@ -202,9 +202,6 @@ public class AlarmAppUI extends JFrame {
             }
         });
         t.start();
-        if (ringing) {
-            t.stop();
-        }
     }
 
     // EFFECTS: checks whether the current time is the same as an alarm time
