@@ -17,7 +17,7 @@ import java.util.List;
 public class Alarms implements Writable {
     private List<Alarm> alarms;        // list of alarms
 
-    // EFFECTS: constrcucts a new ArrayList of AlarmCLocks
+    // EFFECTS: constructs a new ArrayList of AlarmCLocks
     public Alarms() {
         alarms = new ArrayList<>();
     }

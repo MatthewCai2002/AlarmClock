@@ -25,6 +25,7 @@ public class AlarmAppUI extends JFrame {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
 
+    // Alarms and Other UI
     private Alarms alarms;
     private ClockUI clockUI;
     private PuzzleManager puzzleManager;
@@ -32,13 +33,16 @@ public class AlarmAppUI extends JFrame {
     private Boolean ringing;
     private Siren siren;
 
+    // JList
     private JList list;
     private DefaultListModel listModel;
-    private JButton removeButton;
 
+    // Components
     private JDesktopPane desktop;
     private JInternalFrame controlPanel;
+    private JButton removeButton;
 
+    // Json reader and writer
     private JsonWriter jsonWriterAlarms;
     private JsonReader jsonReaderAlarms;
 
@@ -73,6 +77,7 @@ public class AlarmAppUI extends JFrame {
         setVisible(true);
     }
 
+    // MODIFIES: this
     // EFFECTS: initializes alarms, puzzle, puzzleManager,
     //          ringing state, and siren
     private void initAlarm() {
@@ -89,6 +94,7 @@ public class AlarmAppUI extends JFrame {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: helper that displays the list of alarms in the panel
     public void addAlarms() {
         initListModel();
@@ -99,6 +105,7 @@ public class AlarmAppUI extends JFrame {
     }
 
     // inspired by AlarmSystem
+    // MODIFIES: this
     // EFFECTS: helper that adds the global clock to the panel
     public void addClock() {
         clockUI = new ClockUI();
@@ -106,6 +113,7 @@ public class AlarmAppUI extends JFrame {
     }
 
     // inspired by AlarmSystem
+    // MODIFIES: this
     // EFFECTS: helper that adds all buttons to a panel
     public void addButtons() {
         JPanel buttonPanel = new JPanel();
@@ -122,6 +130,7 @@ public class AlarmAppUI extends JFrame {
     }
 
     // from ListDemo
+    // MODIFIES: this
     // EFFECTS: helper that initializes a JList with data from listModel and other parameters
     public void initList() {
         list = new JList(listModel);
@@ -131,6 +140,7 @@ public class AlarmAppUI extends JFrame {
         list.setVisibleRowCount(5);
     }
 
+    // MODIFIES: this
     // EFFECTS: helper that initializes JListModel and adds all alarms into it
     public void initListModel() {
         listModel = new DefaultListModel();
@@ -139,6 +149,8 @@ public class AlarmAppUI extends JFrame {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: helper that adds alarm time to listModel
     private void addToAlarmsModel(Alarm ac) {
         String alarm = ac.getName() + ": " + ac.getAlarmTime();
         listModel.addElement(alarm);
@@ -208,6 +220,7 @@ public class AlarmAppUI extends JFrame {
         t.start();
     }
 
+    // MODIFIES: this
     // EFFECTS: checks whether the current time is the same as an alarm time
     //          if yes then makes the alarm ring
     //              otherwise do nothing
@@ -221,6 +234,7 @@ public class AlarmAppUI extends JFrame {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: checks if the problem has been solved
     //          if yes then it turns off the alarm
     //              otherwise it prompts to try again
@@ -259,6 +273,7 @@ public class AlarmAppUI extends JFrame {
             super("Add Alarm");
         }
 
+        // MODIFIES: this
         // EFFECTS: resets text fields to empty
         public void resetTextFields() {
             hourField.setText("");

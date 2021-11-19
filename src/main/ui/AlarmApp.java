@@ -1,3 +1,4 @@
+/*
 package ui;
 
 // alarm application
@@ -329,3 +330,4 @@ public class AlarmApp {
         }
     }
 }
+*/

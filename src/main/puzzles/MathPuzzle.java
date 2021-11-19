@@ -29,6 +29,13 @@ public abstract class MathPuzzle {
     //          and calculates the correct solution
     public abstract void genRandomPuzzle();
 
+    // MODIFIES: this
+    // EFFECTS: helper that generates random numbers and operator selector
+    public void genRandomNumber() {
+        num1 = (int)(Math.random() * range);
+        num2 = (int)(Math.random() * range);
+        operatorSelector = (int)(Math.random() * operatorRange);
+    }
 
     // MODIFIES: this
     // EFFECTS: if given solution = problem solution then problem is solved

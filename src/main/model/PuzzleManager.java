@@ -15,7 +15,6 @@ public class PuzzleManager {
     private static final int EASY = 0;
     private static final int MEDIUM = 1;
 
-
     private MathPuzzle puzzle; // the puzzle required to solve to turn off alarm
     private int difficulty;
 

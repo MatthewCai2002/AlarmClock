@@ -23,9 +23,7 @@ public class MediumMathPuzzle extends MathPuzzle {
 
     @Override
     public void genRandomPuzzle() {
-        num1 = (int)(Math.random() * range);
-        num2 = (int)(Math.random() * range);
-        operatorSelector = (int)(Math.random() * operatorRange);
+        super.genRandomNumber();
         if (operatorSelector == ADD) {
             problem = num1 + " + " + num2;
             correctSolution = num1 + num2;
@@ -33,7 +31,7 @@ public class MediumMathPuzzle extends MathPuzzle {
             problem = num1 + " - " + num2;
             correctSolution = num1 - num2;
         } else  {
-            // last case is multiplication
+            // last case is multiplication because only 3 options
             problem = num1 + " * " + num2;
             correctSolution = num1 * num2;
         }

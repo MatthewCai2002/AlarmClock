@@ -34,6 +34,7 @@ public class ClockUI extends JPanel {
     }
 
     // set up clock
+    // MODIFIES: this
     // EFFECTS: initializes clock that matches system clock
     //          and time format
     public void initClock() {
@@ -56,6 +57,7 @@ public class ClockUI extends JPanel {
         t.start();
     }
 
+    // MODIFIES: this
     // EFFECTS: sets clock label to current system time
     public void updateClock() {
         time = Date.from(clock.instant());
