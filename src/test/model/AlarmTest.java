@@ -19,7 +19,7 @@ class AlarmTest {
     public void testConstructorNoException() {
         try {
             String alarmTime = testAlarm.getAlarmTime();
-            assertTrue(alarmTime.equals("18:0:0"));
+            assertTrue(alarmTime.equals("18:00:00"));
         } catch (InvalidTimeException e) {
             fail();
         }
@@ -60,15 +60,15 @@ class AlarmTest {
         try {
             testAlarm.setAlarmTimeHours(0);
             String time = testAlarm.getAlarmTime();
-            assertEquals("00:00:0", time);
+            assertEquals("00:00:00", time);
 
             testAlarm.setAlarmTimeHours(12);
             time = testAlarm.getAlarmTime();
-            assertEquals("12:0:0", time);
+            assertEquals("12:00:00", time);
 
             testAlarm.setAlarmTimeHours(24);
             time = testAlarm.getAlarmTime();
-            assertEquals("24:0:0", time);
+            assertEquals("24:00:00", time);
         } catch (InvalidTimeException e) {
             fail();
         }
@@ -99,15 +99,15 @@ class AlarmTest {
         try {
             testAlarm.setAlarmTimeMinutes(0);
             String time = testAlarm.getAlarmTime();
-            assertEquals("18:0:0", time);
+            assertEquals("18:00:00", time);
 
             testAlarm.setAlarmTimeMinutes(30);
             time = testAlarm.getAlarmTime();
-            assertEquals("18:30:0", time);
+            assertEquals("18:30:00", time);
 
             testAlarm.setAlarmTimeMinutes(60);
             time = testAlarm.getAlarmTime();
-            assertEquals("18:60:0", time);
+            assertEquals("18:60:00", time);
 
         } catch (InvalidTimeException e) {
             fail();

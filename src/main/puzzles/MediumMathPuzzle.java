@@ -10,7 +10,6 @@ between 2 integers from 0-100
 public class MediumMathPuzzle extends MathPuzzle {
     private static final int ADD = 0;
     private static final int SUBTRACT = 1;
-    private static final int MULTIPLY = 2;
 
     // EFFECTS: constructs a medium difficulty math puzzle with 2
     //          random integers from 0-50 and a random operator of either
@@ -34,6 +33,7 @@ public class MediumMathPuzzle extends MathPuzzle {
             problem = num1 + " - " + num2;
             correctSolution = num1 - num2;
         } else  {
+            // last case is multiplication
             problem = num1 + " * " + num2;
             correctSolution = num1 * num2;
         }

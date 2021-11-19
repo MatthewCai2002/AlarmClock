@@ -63,12 +63,9 @@ public class ClockUI extends JPanel {
         clockLabel.setText(formattedTime);
     }
 
-    // EFFECTS: converts formattedTime from HH:mm:ss
-    //          to HH:mm:0
-    public String getNewFormattedTime() {
-        SimpleDateFormat newFormat = new SimpleDateFormat("HH:mm:0");
-        String newFormattedTime = newFormat.format(time);
-        return newFormattedTime;
+    // EFFECTS: returns formattedTime
+    public String getFormattedTime() {
+        return formattedTime;
     }
 
 }

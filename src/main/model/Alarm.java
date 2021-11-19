@@ -63,13 +63,13 @@ public class Alarm implements Writable {
     // EFFECTS: returns the set alarm time in the form Hours:Minutes:0
     public String getAlarmTime() {
         if (alarmTimeHours < 10 && alarmTimeMinutes < 10) {
-            return "0" + alarmTimeHours + ":" + "0" + alarmTimeMinutes + ":0";
+            return "0" + alarmTimeHours + ":0" + alarmTimeMinutes + ":00";
         } else if (alarmTimeHours < 10) {
-            return "0" + alarmTimeHours + ":" + alarmTimeMinutes + ":0";
+            return "0" + alarmTimeHours + ":" + alarmTimeMinutes + ":00";
         } else if (alarmTimeMinutes < 10) {
-            return alarmTimeHours + ":" + alarmTimeMinutes + ":0";
+            return alarmTimeHours + ":0" + alarmTimeMinutes + ":00";
         }
-        return alarmTimeHours + ":" + alarmTimeMinutes + ":0";
+        return alarmTimeHours + ":" + alarmTimeMinutes + ":00";
     }
 
     // EFFECTS: returns name of the alarm clock

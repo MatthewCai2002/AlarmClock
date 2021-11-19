@@ -6,7 +6,6 @@ package puzzles;
 
 public class EasyMathPuzzle extends MathPuzzle {
     private static final int ADD = 0;
-    private static final int SUBTRACT = 1;
 
 
     // EFFECTS: constructs an easy math puzzle with 2 random integers from 0-50
@@ -27,6 +26,7 @@ public class EasyMathPuzzle extends MathPuzzle {
             problem = num1 + " + " + num2;
             correctSolution = num1 + num2;
         } else  {
+            // last case is subtraction
             problem = num1 + " - " + num2;
             correctSolution = num1 - num2;
         }

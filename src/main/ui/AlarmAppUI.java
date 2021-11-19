@@ -74,6 +74,8 @@ public class AlarmAppUI extends JFrame {
         setVisible(true);
     }
 
+    // EFFECTS: initializes alarms, puzzle, puzzleManager,
+    //          ringing state, and siren
     private void initAlarm() {
         alarms = new Alarms();
         puzzleManager = new PuzzleManager();
@@ -134,10 +136,15 @@ public class AlarmAppUI extends JFrame {
     public void initListModel() {
         listModel = new DefaultListModel();
         for (Alarm ac : alarms.getAlarms()) {
-            String alarm = ac.getName() + ": " + ac.getAlarmTime();
-            listModel.addElement(alarm);
+            addToAlarmsModel(ac);
         }
     }
+
+    private void addToAlarmsModel(Alarm ac) {
+        String alarm = ac.getName() + ": " + ac.getAlarmTime();
+        listModel.addElement(alarm);
+    }
+
 
     // MODIFIES: this
     // EFFECTS: initializes JSON readers and writers
@@ -204,9 +211,9 @@ public class AlarmAppUI extends JFrame {
 
     // EFFECTS: checks whether the current time is the same as an alarm time
     //          if yes then makes the alarm ring
-    //              otherwise there does nothing
+    //              otherwise do nothing
     public void checkIfRing() {
-        String formattedTime = clockUI.getNewFormattedTime();
+        String formattedTime = clockUI.getFormattedTime();
         for (Alarm ac : alarms.getAlarms()) {
             if (ac.getAlarmTime().equals(formattedTime)) {
                 ringing = true;
@@ -224,9 +231,7 @@ public class AlarmAppUI extends JFrame {
         if (solved) {
             ringing = false;
             siren.stopAudio();
-            System.out.println("CONGRATULATIONS YOU GOT UP!!!");
-        } else {
-            System.out.println("oops that's not quite right, try again");
+            showImage("./data/Right.png","Success!","CONGRATULATIONS YOU GOT UP!!!");
         }
     }
 
@@ -255,6 +260,13 @@ public class AlarmAppUI extends JFrame {
             super("Add Alarm");
         }
 
+        // EFFECTS: resets text fields to empty
+        public void resetTextFields() {
+            hourField.setText("");
+            minutesField.setText("");
+            nameField.setText("");
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
             int result = JOptionPane.showOptionDialog(
@@ -265,18 +277,19 @@ public class AlarmAppUI extends JFrame {
                 String hoursString = hourField.getText();
                 String minutesString = minutesField.getText();
                 String name = nameField.getText();
+                resetTextFields();
                 try {
                     int hours = Integer.parseInt(hoursString);
                     int minutes = Integer.parseInt(minutesString);
                     Alarm alarm = new Alarm(name,hours,minutes);
                     alarms.addAlarm(alarm);
-                    String alarmString = alarm.getName() + ": " + alarm.getAlarmTime();
-                    listModel.addElement(alarmString);
+                    addToAlarmsModel(alarm);
                     showImage("./data/Right.png","Success", "Successfully added alarm!");
                 } catch (RuntimeException re) {
                     showImage("./data/Wrong.png","Error","Sorry that wasn't a valid time");
                     actionPerformed(e);
                 }
+
             }
         }
     }
@@ -297,8 +310,7 @@ public class AlarmAppUI extends JFrame {
             listModel.remove(index);
             if (listModel.size() == 0) {
                 this.setEnabled(false);
-            }
-            if (index == listModel.getSize()) {
+            } else if (index == listModel.getSize()) {
                 index--;
             }
             list.setSelectedIndex(index);
@@ -369,13 +381,12 @@ public class AlarmAppUI extends JFrame {
             try {
                 alarms = jsonReaderAlarms.readAlarms();
                 for (Alarm alarm : alarms.getAlarms()) {
-                    String alarmString = alarm.getName() + ": " + alarm.getAlarmTime();
-                    listModel.addElement(alarmString);
+                    addToAlarmsModel(alarm);
                 }
                 list.setSelectedIndex(0);
                 JOptionPane.showMessageDialog(controlPanel,
                         "Loaded alarms from " + JSON_STORE_ALARMS,
-                        "Successful Load",JOptionPane.INFORMATION_MESSAGE);
+                        "Successfully Load",JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ie) {
                 JOptionPane.showMessageDialog(controlPanel,
                         "Unable to read from file: " + JSON_STORE_ALARMS,
@@ -433,9 +444,5 @@ public class AlarmAppUI extends JFrame {
                     "unable to write to file in " + JSON_STORE_ALARMS,
                     "Successfully Saved",JOptionPane.INFORMATION_MESSAGE);
         }
-    }
-
-    public static void main(String[] args) {
-        new AlarmAppUI();
     }
 }
