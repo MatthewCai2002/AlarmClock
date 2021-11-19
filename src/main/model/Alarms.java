@@ -44,7 +44,7 @@ public class Alarms implements Writable {
     // EFFECTS: if name is in alarms returns the alarm clock with given name
     //          otherwise throws CouldNotFindClockException
     public Alarm findAlarmClockByName(String name) throws CouldNotFindClockException {
-        Alarm foundClock = new Alarm("",0,0);
+        Alarm foundClock;
         for (Alarm ac : alarms) {
             if (ac.getName().equals(name)) {
                 foundClock = ac;

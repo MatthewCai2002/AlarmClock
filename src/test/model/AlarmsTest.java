@@ -52,7 +52,7 @@ public class AlarmsTest {
     public void testFindAlarmClockByNameInAlarms() {
         try {
             Alarm alarm2 = testAlarms.findAlarmClockByName("alarm2");
-            assertTrue(alarm2.getAlarmTime().equals("2:2:0"));
+            assertTrue(alarm2.getAlarmTime().equals("02:02:00"));
         } catch (CouldNotFindClockException e) {
             fail("did not expect exception");
         }

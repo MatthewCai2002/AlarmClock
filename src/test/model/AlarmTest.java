@@ -56,6 +56,16 @@ class AlarmTest {
     }
 
     @Test
+    public void testConstructorbIGMinutes() {
+        try {
+            testAlarm = new Alarm("name", 12, 600);
+            fail();
+        } catch (InvalidTimeException e) {
+            // expected
+        }
+    }
+
+    @Test
     public void testSetAlarmTimeHours() {
         try {
             testAlarm.setAlarmTimeHours(0);

@@ -69,7 +69,7 @@ public class JsonWriterTest {
 
             assertEquals(3, alarms.getAlarms().size());
             assertTrue(alarms.getAlarms().contains(ac3));
-            assertTrue(ac3.getAlarmTime().equals("6:55:0"));
+            assertTrue(ac3.getAlarmTime().equals("06:55:00"));
         } catch (IOException e) {
             fail("was not expecting an exception");
         } catch (CouldNotFindClockException e) {
