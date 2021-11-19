@@ -27,6 +27,7 @@ public class AlarmAppUI extends JFrame {
 
     private JList list;
     private DefaultListModel listModel;
+    private JButton removeButton;
 
     private JDesktopPane desktop;
     private JInternalFrame controlPanel;
@@ -57,7 +58,9 @@ public class AlarmAppUI extends JFrame {
         controlPanel.setVisible(true);
         desktop.add(controlPanel);
         Dimension controlPanelSize = controlPanel.getSize();
-        controlPanel.setLocation((WIDTH - controlPanelSize.width)/2,(HEIGHT - controlPanelSize.height)/2);
+        controlPanel.setLocation((
+                WIDTH - controlPanelSize.width) / 2,
+                (HEIGHT - controlPanelSize.height) / 2);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -82,9 +85,10 @@ public class AlarmAppUI extends JFrame {
     // EFFECTS: helper that adds all buttons to a panel
     public void addButtons() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4,1));
+        removeButton = new JButton(new RemoveAlarmAction());
+        buttonPanel.setLayout(new GridLayout(6,1));
         buttonPanel.add(new JButton(new AddAlarmAction()));
-        buttonPanel.add(new JButton(new RemoveAlarmAction()));
+        buttonPanel.add(removeButton);
         buttonPanel.add(new JButton(new SetDifficultyAction()));
         buttonPanel.add(new JButton(new SaveAlarmsAction()));
         buttonPanel.add(new JButton(new LoadAlarmsAction()));
@@ -98,7 +102,7 @@ public class AlarmAppUI extends JFrame {
     public void initList() {
         list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setSelectedIndex(0);
+        list.setSelectedIndex(-1);
         list.addListSelectionListener(new ListListener());
         list.setVisibleRowCount(5);
     }
@@ -144,18 +148,9 @@ public class AlarmAppUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             int result = JOptionPane.showOptionDialog(
-                    null,
-                    new Object[]{"Please enter a clock hours, minutes, and name",
-                            hourField,
-                            minutesField,
-                            nameField},
-                    "Add An Alarm",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    null,
-                    null);
-
+                    null, new Object[]{"Please enter hours, minutes, and name", hourField, minutesField,
+                            nameField}, "Add An Alarm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null, null, null);
             if (result == JOptionPane.OK_OPTION) {
                 String hoursString = hourField.getText();
                 String minutesString = minutesField.getText();
@@ -242,6 +237,7 @@ public class AlarmAppUI extends JFrame {
                     String alarmString = alarm.getName() + ": " + alarm.getAlarmTime();
                     listModel.addElement(alarmString);
                 }
+                list.setSelectedIndex(0);
                 System.out.println("Loaded alarms from " + JSON_STORE_ALARMS);
             } catch (IOException ie) {
                 System.out.println("Unable to read from file: " + JSON_STORE_ALARMS);
@@ -264,21 +260,26 @@ public class AlarmAppUI extends JFrame {
         }
 
     }
+
     // inspired by ListDemo from oracle tutorials
     /* represents the action to be taken when a user selects
     an alarm in list of alarms
      */
     private class ListListener implements ListSelectionListener {
 
-
         @Override
         public void valueChanged(ListSelectionEvent e) {
-           // does not do anything
+            if (e.getValueIsAdjusting() == false) {
+                if (list.getSelectedIndex() == -1) {
+                    removeButton.setEnabled(false);
+                } else {
+                    removeButton.setEnabled(true);
+                }
+            }
         }
-
     }
-    // EFFECTS: saves alarms to file
 
+    // EFFECTS: saves alarms to file
     public void saveAlarms() {
         try {
             jsonWriterAlarms.open();
