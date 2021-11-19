@@ -20,6 +20,10 @@ import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/*
+    represents the GUI for the alarm app
+ */
+
 public class AlarmAppUI extends JFrame {
     private static final String JSON_STORE_ALARMS = "./data/Alarms/Alarms.json";
     private static final int WIDTH = 800;
