@@ -33,7 +33,7 @@ public class MediumMathPuzzle extends MathPuzzle {
         } else if (operatorSelector == SUBTRACT) {
             problem = num1 + " - " + num2;
             correctSolution = num1 - num2;
-        } else if (operatorSelector == MULTIPLY) {
+        } else  {
             problem = num1 + " * " + num2;
             correctSolution = num1 * num2;
         }

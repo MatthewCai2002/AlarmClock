@@ -36,6 +36,26 @@ class AlarmTest {
     }
 
     @Test
+    public void testConstructorNegativeTime() {
+        try {
+            testAlarm = new Alarm("name", -1, -1);
+            fail();
+        } catch (InvalidTimeException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testConstructorNegativeMinutes() {
+        try {
+            testAlarm = new Alarm("name", 12, -1);
+            fail();
+        } catch (InvalidTimeException e) {
+            // expected
+        }
+    }
+
+    @Test
     public void testSetAlarmTimeHours() {
         try {
             testAlarm.setAlarmTimeHours(0);
