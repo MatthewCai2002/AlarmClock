@@ -1,8 +1,5 @@
 package ui;
 
-import sun.java2d.HeadlessGraphicsEnvironment;
-import sun.java2d.pipe.SpanShapeRenderer;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

@@ -9,8 +9,6 @@ import persistence.JsonWriter;
 import puzzles.EasyMathPuzzle;
 import puzzles.MathPuzzle;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;

@@ -4,8 +4,6 @@ package puzzles;
  between 2 integers from 0-50
 */
 
-import sun.security.mscapi.CPublicKey;
-
 public class EasyMathPuzzle extends MathPuzzle {
     private static final int ADD = 0;
     private static final int SUBTRACT = 1;
