@@ -1,22 +1,17 @@
 {"Alarms": [
     {
-        "AlarmTimeMinutes": 1,
-        "name": "A",
-        "AlarmTimeHours": 1
+        "AlarmTimeMinutes": 12,
+        "name": "asdf",
+        "AlarmTimeHours": 12
     },
     {
-        "AlarmTimeMinutes": 1,
-        "name": "b",
-        "AlarmTimeHours": 1
+        "AlarmTimeMinutes": 12,
+        "name": "asdf",
+        "AlarmTimeHours": 12
     },
     {
-        "AlarmTimeMinutes": 1,
-        "name": "c",
-        "AlarmTimeHours": 1
-    },
-    {
-        "AlarmTimeMinutes": 1,
-        "name": "d",
-        "AlarmTimeHours": 1
+        "AlarmTimeMinutes": 12,
+        "name": "asdf",
+        "AlarmTimeHours": 12
     }
 ]}

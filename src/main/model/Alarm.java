@@ -15,7 +15,6 @@ import puzzles.MathPuzzle;
 public class Alarm implements Writable {
     private int alarmTimeHours;         // the hours the alarm is set for
     private int alarmTimeMinutes;       // the minutes the alarm is set for
-    private Boolean ringing;            // the current ringing state of the alarm
     private String name;                // alarm name
 
     // REQUIRES: 0 <= hours <= 24 && 0 <= minutes <= 60
@@ -24,7 +23,6 @@ public class Alarm implements Writable {
         if ((0 <= hours && hours <= 24) && (0 <= minutes && minutes <= 60)) {
             alarmTimeHours = hours;
             alarmTimeMinutes = minutes;
-            ringing = false;
             this.name = name;
         } else {
             throw new InvalidTimeException();
@@ -63,12 +61,14 @@ public class Alarm implements Writable {
 
     // EFFECTS: returns the set alarm time in the form Hours:Minutes:0
     public String getAlarmTime() {
+        if (alarmTimeHours < 10 && alarmTimeMinutes < 10) {
+            return "0" + alarmTimeHours + ":" + "0" + alarmTimeMinutes + ":0";
+        } else if (alarmTimeHours < 10) {
+            return "0" + alarmTimeHours + ":" + alarmTimeMinutes + ":0";
+        } else if (alarmTimeMinutes < 10) {
+            return alarmTimeHours + ":" + alarmTimeMinutes + ":0";
+        }
         return alarmTimeHours + ":" + alarmTimeMinutes + ":0";
-    }
-
-    // EFFECTS: returns the ringing state of the alarm
-    public Boolean getRinging() {
-        return ringing;
     }
 
     // EFFECTS: returns name of the alarm clock

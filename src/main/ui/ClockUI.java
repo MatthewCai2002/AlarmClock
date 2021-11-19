@@ -1,6 +1,7 @@
 package ui;
 
 import sun.java2d.HeadlessGraphicsEnvironment;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,4 +65,13 @@ public class ClockUI extends JPanel {
         formattedTime = timeFormat.format(time);
         clockLabel.setText(formattedTime);
     }
+
+    // EFFECTS: converts formattedTime from HH:mm:ss
+    //          to HH:mm:0
+    public String getNewFormattedTime() {
+        SimpleDateFormat newFormat = new SimpleDateFormat("HH:mm:0");
+        String newFormattedTime = newFormat.format(time);
+        return newFormattedTime;
+    }
+
 }

@@ -43,4 +43,3 @@ my morning habit.
 - As a user, I would like to be able to save the alarms I add
 - As a user, I would like to be able to load my alarms from a file and start where I left off
 - As a user, I would like to be able to select the difficulty of the problems I need to solve
-- 

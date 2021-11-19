@@ -1,16 +1,22 @@
 package ui;
 
-import exceptions.InvalidTimeException;
+import exceptions.InvalidDifficultyException;
 import model.Alarm;
 import model.Alarms;
+import model.PuzzleManager;
 import persistence.JsonReader;
 import persistence.JsonWriter;
+import puzzles.EasyMathPuzzle;
+import puzzles.MathPuzzle;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
@@ -24,6 +30,10 @@ public class AlarmAppUI extends JFrame {
 
     private Alarms alarms;
     private ClockUI clockUI;
+    private PuzzleManager puzzleManager;
+    private MathPuzzle puzzle;
+    private Boolean ringing;
+    private Siren siren;
 
     private JList list;
     private DefaultListModel listModel;
@@ -38,12 +48,12 @@ public class AlarmAppUI extends JFrame {
     // inspired by AlarmSystem
     // EFFECTS: constructs an alarm app with a global clock, buttons, and displayed alarms
     public AlarmAppUI() {
-        alarms = new Alarms();
+        initAlarm();
         initReadWrite();
 
         desktop = new JDesktopPane();
         desktop.addMouseListener(new DesktopFocusAction());
-        controlPanel = new JInternalFrame("", false, false,false,false);
+        controlPanel = new JInternalFrame("", false, false,true,false);
         controlPanel.setLayout(new BorderLayout());
 
         setContentPane(desktop);
@@ -53,6 +63,7 @@ public class AlarmAppUI extends JFrame {
         addAlarms();
         addButtons();
         addClock();
+        checkRingingEverySecond();
 
         controlPanel.pack();
         controlPanel.setVisible(true);
@@ -63,6 +74,20 @@ public class AlarmAppUI extends JFrame {
                 (HEIGHT - controlPanelSize.height) / 2);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    private void initAlarm() {
+        alarms = new Alarms();
+        puzzleManager = new PuzzleManager();
+        puzzle = new EasyMathPuzzle();
+        ringing = false;
+        try {
+            siren = new Siren();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // EFFECTS: helper that displays the list of alarms in the panel
@@ -86,7 +111,7 @@ public class AlarmAppUI extends JFrame {
     public void addButtons() {
         JPanel buttonPanel = new JPanel();
         removeButton = new JButton(new RemoveAlarmAction());
-        buttonPanel.setLayout(new GridLayout(6,1));
+        buttonPanel.setLayout(new GridLayout(3,2));
         buttonPanel.add(new JButton(new AddAlarmAction()));
         buttonPanel.add(removeButton);
         buttonPanel.add(new JButton(new SetDifficultyAction()));
@@ -123,9 +148,98 @@ public class AlarmAppUI extends JFrame {
         jsonReaderAlarms = new JsonReader(JSON_STORE_ALARMS);
     }
 
+    // EFFECTS: helper method that displays
+    //          an image with a label in a popup
+    public void showImage(String fileLocation, String description, String message) {
+        ImageIcon shownImage = new ImageIcon(fileLocation, description);
+        Image rawImage = shownImage.getImage();
+        Image scaledImage = rawImage.getScaledInstance(80,80,Image.SCALE_SMOOTH);
+        shownImage = new ImageIcon(scaledImage);
+        JLabel imageLabel = new JLabel(message, shownImage, JLabel.CENTER);
+        JOptionPane.showMessageDialog(controlPanel,
+                imageLabel,
+                description,
+                JOptionPane.PLAIN_MESSAGE,
+                null);
+    }
+
+    // EFFECT: rings alarm when current time reaches an alarm time
+    public void ringAlarm() {
+        javax.swing.Timer t = new Timer(0, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (ringing) {
+                    siren.playAudio();
+                }
+            }
+        });
+        t.start();
+        String tempSol = JOptionPane.showInputDialog(
+                controlPanel,
+                "solve " + puzzle.getProblem() + " to turn off the alarm");
+        try {
+            int solution = Integer.parseInt(tempSol);
+            checkSolved(solution);
+            if (!ringing) {
+                t.stop();
+            }
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(controlPanel,
+                    "That was an invalid solution",
+                    "Error",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    // inspired by SpaceInvaders
+    // set up timer
+    // EFFECTS: initializes timer that updates clock every
+    //          second
+    public void checkRingingEverySecond() {
+        javax.swing.Timer t = new javax.swing.Timer(0, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkIfRing();
+            }
+        });
+        t.start();
+        if (ringing) {
+            t.stop();
+        }
+    }
+
+    // EFFECTS: checks whether the current time is the same as an alarm time
+    //          if yes then makes the alarm ring
+    //              otherwise there does nothing
+    public void checkIfRing() {
+        String formattedTime = clockUI.getNewFormattedTime();
+        for (Alarm ac : alarms.getAlarms()) {
+            if (ac.getAlarmTime().equals(formattedTime)) {
+                ringing = true;
+                ringAlarm();
+            }
+        }
+    }
+
+    // EFFECTS: checks if the problem has been solved
+    //          if yes then it turns off the alarm
+    //              otherwise it prompts to try again
+    public void checkSolved(int solution) {
+        puzzle.solvePuzzle(solution);
+        boolean solved = puzzle.isSolved();
+        if (solved) {
+            ringing = false;
+            siren.stopAudio();
+            System.out.println("CONGRATULATIONS YOU GOT UP!!!");
+        } else {
+            System.out.println("oops that's not quite right, try again");
+        }
+    }
+
     // from AlarmSystem
-    /* represents the action to be taken when the user clicks on the app
-    to switch focus */
+    /*
+    represents the action to be taken when the user clicks on the app
+    to switch focus
+    */
     private class DesktopFocusAction extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -133,7 +247,8 @@ public class AlarmAppUI extends JFrame {
         }
     }
 
-    /* represents the action to be taken when the user wants
+    /*
+    represents the action to be taken when the user wants
     to add an alarm
      */
     private class AddAlarmAction extends AbstractAction {
@@ -148,7 +263,7 @@ public class AlarmAppUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             int result = JOptionPane.showOptionDialog(
-                    null, new Object[]{"Please enter hours, minutes, and name", hourField, minutesField,
+                    controlPanel, new Object[]{"Please enter hours, minutes, and name", hourField, minutesField,
                             nameField}, "Add An Alarm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
                     null, null, null);
             if (result == JOptionPane.OK_OPTION) {
@@ -162,12 +277,10 @@ public class AlarmAppUI extends JFrame {
                     alarms.addAlarm(alarm);
                     String alarmString = alarm.getName() + ": " + alarm.getAlarmTime();
                     listModel.addElement(alarmString);
-                } catch (NumberFormatException nfe) {
-                    System.out.println("sorry that was an invalid time");
-                    System.exit(0);
-                } catch (InvalidTimeException ite) {
-                    System.out.println("sorry that was an invalid time");
-                    System.exit(0);
+                    showImage("./data/Right.png","Success", "Successfully added alarm!");
+                } catch (RuntimeException re) {
+                    showImage("./data/Wrong.png","Error","Sorry that wasn't a valid time");
+                    actionPerformed(e);
                 }
             }
         }
@@ -198,7 +311,8 @@ public class AlarmAppUI extends JFrame {
         }
     }
 
-    /* represents the action to be taken when a user wants to
+    /*
+    represents the action to be taken when a user wants to
     set a difficulty
      */
     private class SetDifficultyAction extends AbstractAction {
@@ -208,11 +322,33 @@ public class AlarmAppUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO: Implement
-
+            String[] options = new String[] {"easy", "medium"};
+            String difficulty = (String) JOptionPane.showInputDialog(
+                    controlPanel,
+                    "Select a Difficulty",
+                    "Difficulty",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+            if (difficulty != null) {
+                try {
+                    puzzleManager.setPuzzle(difficulty);
+                    puzzle = puzzleManager.getPuzzle();
+                    showImage("./data/Right.png",
+                            "Successful Set Difficulty",
+                            "Set difficulty to " + difficulty);
+                } catch (InvalidDifficultyException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 
+    /*
+     represents the action to be taken when a user wants to
+    save their data
+     */
     private class SaveAlarmsAction extends AbstractAction {
         SaveAlarmsAction() {
             super("Save");
@@ -224,6 +360,10 @@ public class AlarmAppUI extends JFrame {
         }
     }
 
+    /*
+    represents the action to take when a user wants to
+    load their data
+     */
     private class LoadAlarmsAction extends AbstractAction {
         LoadAlarmsAction() {
             super("Load");
@@ -238,18 +378,23 @@ public class AlarmAppUI extends JFrame {
                     listModel.addElement(alarmString);
                 }
                 list.setSelectedIndex(0);
-                System.out.println("Loaded alarms from " + JSON_STORE_ALARMS);
+                JOptionPane.showMessageDialog(controlPanel,
+                        "Loaded alarms from " + JSON_STORE_ALARMS,
+                        "Successful Load",JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ie) {
-                System.out.println("Unable to read from file: " + JSON_STORE_ALARMS);
+                JOptionPane.showMessageDialog(controlPanel,
+                        "Unable to read from file: " + JSON_STORE_ALARMS,
+                        "Error",JOptionPane.INFORMATION_MESSAGE);
+
             }
         }
     }
 
-    /* represents the action to be taken when a user wants
+    /*
+    represents the action to be taken when a user wants
     to quit the application
      */
     private class QuitAction extends AbstractAction {
-
         QuitAction() {
             super("Quit");
         }
@@ -262,14 +407,14 @@ public class AlarmAppUI extends JFrame {
     }
 
     // inspired by ListDemo from oracle tutorials
-    /* represents the action to be taken when a user selects
+    /*
+    represents the action to be taken when a user selects
     an alarm in list of alarms
      */
     private class ListListener implements ListSelectionListener {
-
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            if (e.getValueIsAdjusting() == false) {
+            if (!e.getValueIsAdjusting()) {
                 if (list.getSelectedIndex() == -1) {
                     removeButton.setEnabled(false);
                 } else {
@@ -285,9 +430,13 @@ public class AlarmAppUI extends JFrame {
             jsonWriterAlarms.open();
             jsonWriterAlarms.write(alarms);
             jsonWriterAlarms.close();
-            System.out.println("saved all your alarms to " + JSON_STORE_ALARMS);
+            JOptionPane.showMessageDialog(controlPanel,
+                    "saved all your alarms to " + JSON_STORE_ALARMS,
+                    "Successfully Saved",JOptionPane.INFORMATION_MESSAGE);
         } catch (FileNotFoundException e) {
-            System.out.println("unable to write to file in " + JSON_STORE_ALARMS);
+            JOptionPane.showMessageDialog(controlPanel,
+                    "unable to write to file in " + JSON_STORE_ALARMS,
+                    "Successfully Saved",JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
