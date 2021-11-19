@@ -27,9 +27,26 @@ public class EasyMathPuzzleTest {
         }
     }
 
-    // no idea how i'm supposed to test this
+
     @Test
     public void testGenRandomPuzzle() {
+        for (int i = 0; i < 5; i++) {
+            testPuzzle.genRandomPuzzle();
+            int num1 = testPuzzle.getNum1();
+            int num2 = testPuzzle.getNum2();
+            int solution = testPuzzle.getCorrectSolution();
+            String problem = testPuzzle.getProblem();
+            System.out.println(problem);
+            System.out.println(solution);
+            if (0 <= num1 && num1 < 50 && 0 <= num2 && num2 < 50) {
+                // expected
+            }
+            assertEquals(solution, testPuzzle.getCorrectSolution());
+        }
+    }
+
+    /*@Test
+    public void testGenRandomPuzzle2() {
         testPuzzle.genRandomPuzzle();
         String problem = testPuzzle.getProblem();
         int num1 = testPuzzle.getNum1();
@@ -42,6 +59,36 @@ public class EasyMathPuzzleTest {
         }
         assertEquals(solution, testPuzzle.getCorrectSolution());
     }
+
+    @Test
+    public void testGenRandomPuzzle3() {
+        testPuzzle.genRandomPuzzle();
+        String problem = testPuzzle.getProblem();
+        int num1 = testPuzzle.getNum1();
+        int num2 = testPuzzle.getNum2();
+        int solution = testPuzzle.getCorrectSolution();
+        System.out.println(problem);
+        System.out.println(solution);
+        if (0 <= num1 && num1 < 50 && 0 <= num2 && num2 < 50){
+            // expected
+        }
+        assertEquals(solution, testPuzzle.getCorrectSolution());
+    }
+
+    @Test
+    public void testGenRandomPuzzle4() {
+        testPuzzle.genRandomPuzzle();
+        String problem = testPuzzle.getProblem();
+        int num1 = testPuzzle.getNum1();
+        int num2 = testPuzzle.getNum2();
+        int solution = testPuzzle.getCorrectSolution();
+        System.out.println(problem);
+        System.out.println(solution);
+        if (0 <= num1 && num1 < 50 && 0 <= num2 && num2 < 50){
+            // expected
+        }
+        assertEquals(solution, testPuzzle.getCorrectSolution());
+    }*/
 
     @Test
     public void testSolvePuzzle() {

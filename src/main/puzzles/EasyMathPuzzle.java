@@ -14,14 +14,14 @@ public class EasyMathPuzzle extends MathPuzzle {
         super();
         range = 50;
         operatorRange = 2;
-        num1 = (int)(Math.random() * range);
-        num2 = (int)(Math.random() * range);
-        operatorSelector = (int)(Math.random() * operatorRange);
         genRandomPuzzle();
     }
 
     @Override
     public void genRandomPuzzle() {
+        num1 = (int)(Math.random() * range);
+        num2 = (int)(Math.random() * range);
+        operatorSelector = (int)(Math.random() * operatorRange);
         if (operatorSelector == ADD) {
             problem = num1 + " + " + num2;
             correctSolution = num1 + num2;

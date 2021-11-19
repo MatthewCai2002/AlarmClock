@@ -179,6 +179,7 @@ public class AlarmAppUI extends JFrame {
             }
         });
         t.start();
+        puzzle.genRandomPuzzle();
         String tempSol = JOptionPane.showInputDialog(
                 controlPanel,
                 "solve " + puzzle.getProblem() + " to turn off the alarm");
