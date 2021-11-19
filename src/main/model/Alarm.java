@@ -10,7 +10,6 @@ alarm hours and minutes a puzzle to solve, name, and ringing state.
 import exceptions.InvalidTimeException;
 import org.json.JSONObject;
 import persistence.Writable;
-import puzzles.MathPuzzle;
 
 public class Alarm implements Writable {
     private int alarmTimeHours;         // the hours the alarm is set for

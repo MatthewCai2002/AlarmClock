@@ -157,7 +157,7 @@ public class AlarmAppUI extends JFrame {
     public void showImage(String fileLocation, String description, String message) {
         ImageIcon shownImage = new ImageIcon(fileLocation, description);
         Image rawImage = shownImage.getImage();
-        Image scaledImage = rawImage.getScaledInstance(80,80,Image.SCALE_SMOOTH);
+        Image scaledImage = rawImage.getScaledInstance(60,60,Image.SCALE_SMOOTH);
         shownImage = new ImageIcon(scaledImage);
         JLabel imageLabel = new JLabel(message, shownImage, JLabel.CENTER);
         JOptionPane.showMessageDialog(controlPanel,
@@ -189,8 +189,8 @@ public class AlarmAppUI extends JFrame {
             }
         } catch (NumberFormatException nfe) {
             JOptionPane.showMessageDialog(controlPanel,
-                    "That was an invalid solution",
-                    "Error",JOptionPane.INFORMATION_MESSAGE);
+                    "That was an invalid solution", "Error",JOptionPane.INFORMATION_MESSAGE);
+            ringAlarm();
         }
     }
 
