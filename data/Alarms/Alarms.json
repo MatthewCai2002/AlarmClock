@@ -1,22 +1,22 @@
 {"Alarms": [
     {
-        "AlarmTimeMinutes": 12,
-        "name": "sadf",
-        "AlarmTimeHours": 23
-    },
-    {
-        "AlarmTimeMinutes": 2,
-        "name": "child",
-        "AlarmTimeHours": 2
-    },
-    {
-        "AlarmTimeMinutes": 2,
-        "name": "fdsaf",
+        "AlarmTimeMinutes": 1,
+        "name": "A",
         "AlarmTimeHours": 1
     },
     {
-        "AlarmTimeMinutes": 4,
-        "name": "asdf",
-        "AlarmTimeHours": 2
+        "AlarmTimeMinutes": 1,
+        "name": "b",
+        "AlarmTimeHours": 1
+    },
+    {
+        "AlarmTimeMinutes": 1,
+        "name": "c",
+        "AlarmTimeHours": 1
+    },
+    {
+        "AlarmTimeMinutes": 1,
+        "name": "d",
+        "AlarmTimeHours": 1
     }
 ]}

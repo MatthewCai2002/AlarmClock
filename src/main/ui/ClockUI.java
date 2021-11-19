@@ -58,7 +58,7 @@ public class ClockUI extends JPanel {
         t.start();
     }
 
-    // EFFECTS: sets clock time to current system time
+    // EFFECTS: sets clock label to current system time
     public void updateClock() {
         time = Date.from(clock.instant());
         formattedTime = timeFormat.format(time);

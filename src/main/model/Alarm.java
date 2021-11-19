@@ -20,11 +20,15 @@ public class Alarm implements Writable {
 
     // REQUIRES: 0 <= hours <= 24 && 0 <= minutes <= 60
     // EFFECTS: constructs an alarm clock with given alarm time and name
-    public Alarm(String name, int hours, int minutes) {
-        ringing = false;
-        alarmTimeHours = hours;
-        alarmTimeMinutes = minutes;
-        this.name = name;
+    public Alarm(String name, int hours, int minutes) throws InvalidTimeException {
+        if ((0 <= hours && hours <= 24) && (0 <= minutes && minutes <= 60)) {
+            alarmTimeHours = hours;
+            alarmTimeMinutes = minutes;
+            ringing = false;
+            this.name = name;
+        } else {
+            throw new InvalidTimeException();
+        }
     }
 
     // MODIFIES: this
