@@ -26,19 +26,8 @@ public class Alarms implements Writable {
     // EFFECTS: add given alarm to list of alarms
     public void addAlarm(Alarm alarm) {
         alarms.add(alarm);
-    }
-
-    // MODIFIES: this
-    // EFFECTS: removes the alarm with a matching name from list of alarms
-    //          if there are multiple alarms with the same name,
-    //              it removes the first occurrence
-    public void removeAlarmName(String name) {
-        for (Alarm ac : alarms) {
-            if (ac.getName().equals(name)) {
-                alarms.remove(ac);
-                break;
-            }
-        }
+        EventLog.getInstance().logEvent(
+                new Event("Added Alarm: " + alarm.getName() + "-" + alarm.getAlarmTime() + " to Alarms"));
     }
 
     // EFFECTS: if name is in alarms returns the alarm clock with given name
@@ -57,6 +46,15 @@ public class Alarms implements Writable {
     // EFFECTS: returns alarms
     public List<Alarm> getAlarms() {
         return alarms;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes alarm at given index
+    public void removeAlarmIndex(int index) {
+        alarms.remove(index);
+        Alarm alarm = alarms.get(index);
+        EventLog.getInstance().logEvent(new Event("Removed Alarm: "
+                + alarm.getName() + "-" + alarm.getAlarmTime() + " from Alarms"));
     }
 
     @Override

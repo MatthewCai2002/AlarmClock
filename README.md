@@ -43,3 +43,32 @@ my morning habit.
 - As a user, I would like to be able to save the alarms I add
 - As a user, I would like to be able to load my alarms from a file and start where I left off
 - As a user, I would like to be able to select the difficulty of the problems I need to solve
+
+## Phase 4: Task 3
+
+I was actually really surprised by how little coupling I had between classes that 
+weren't UI and how simple the overall design of my app was. In particular, I was
+surprised that there were very little associations between classes in the model
+and puzzle packages as while I was writing them I knew that alarms had to do 
+something with all the puzzles so I imagined that there would be more associations
+between them. Originally this was the case however, I refactored several times
+throughout phase 3 to mainly reduce coupling and increase cohesion. This then
+resulted in the current app design where the alarms are basically completely 
+separate from the puzzles, only being related through AlarmAppUI.
+
+If I had more time to work on the project:
+
+- I would have liked to implement the observer pattern to AlarmAppUI and Siren
+    - Siren needed to know if the clock in AlarmAppUI was at an alarm time to know to when to play the alarm sound. 
+    - This could have been done through applying the observer pattern with AlarmAppUI as the subject and Siren as the observer
+- I would have liked to improve cohesion in AlarmAppUI
+  - AlarmAppUI does way too much such as:
+    - checking when to ring the alarm
+    - ringing the alarm
+    - displaying everything
+    - managing all the clocks
+    - managing all actionEvents
+    - managing all popups
+  - so I would have liked to separate some of these responsibilities into separate classes to improve cohesion
+  
+

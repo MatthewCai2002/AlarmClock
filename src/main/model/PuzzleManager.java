@@ -21,7 +21,7 @@ public class PuzzleManager {
     // EFFECTS: constructs a puzzle manager with a puzzle and difficulty
     public PuzzleManager() {
         difficulty = EASY;
-        puzzle = null;
+        puzzle = new EasyMathPuzzle();
     }
 
     // MODIFIES: this
@@ -32,8 +32,9 @@ public class PuzzleManager {
         setDifficulty(difficulty);
         if (this.difficulty == MEDIUM) {
             puzzle = new MediumMathPuzzle();
+        } else if (this.difficulty == EASY) {
+            puzzle = new EasyMathPuzzle();
         }
-        puzzle = new EasyMathPuzzle();
     }
 
     // REQUIRES: difficulty is either "easy" or "medium"

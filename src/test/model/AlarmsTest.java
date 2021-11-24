@@ -31,14 +31,14 @@ public class AlarmsTest {
 
     @Test
     public void testRemoveAlarmName() {
-        testAlarms.removeAlarmName("alarm3");
+        removeAlarmName("alarm3");
         assertFalse(testAlarms.getAlarms().contains(alarm3));
 
-        testAlarms.removeAlarmName("cheese");
+        removeAlarmName("cheese");
         assertEquals(2, testAlarms.getAlarms().size());
 
-        testAlarms.removeAlarmName("alarm1");
-        testAlarms.removeAlarmName("alarm2");
+        removeAlarmName("alarm1");
+        removeAlarmName("alarm2");
         assertEquals(0, testAlarms.getAlarms().size());
     }
 
@@ -60,9 +60,9 @@ public class AlarmsTest {
 
     @Test
     public void testFindAlarmClockByNameNotInAlarms() {
-        testAlarms.removeAlarmName("alarm1");
-        testAlarms.removeAlarmName("alarm2");
-        testAlarms.removeAlarmName("alarm3");
+        removeAlarmName("alarm1");
+        removeAlarmName("alarm2");
+        removeAlarmName("alarm3");
 
         try {
             Alarm alarm4 = testAlarms.findAlarmClockByName("alarm4");
@@ -75,15 +75,28 @@ public class AlarmsTest {
 
     @Test
     public void testFindAlarmClockByNameEmptyAlarms() {
-        testAlarms.removeAlarmName("alarm1");
-        testAlarms.removeAlarmName("alarm2");
-        testAlarms.removeAlarmName("alarm3");
+        removeAlarmName("alarm1");
+        removeAlarmName("alarm2");
+        removeAlarmName("alarm3");
 
         try {
             Alarm alarm4 = testAlarms.findAlarmClockByName("alarm2");
             fail("expected exception");
         } catch (CouldNotFindClockException e) {
             // expected
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes the alarm with a matching name from list of alarms
+    //          if there are multiple alarms with the same name,
+    //              it removes the first occurrence
+    public void removeAlarmName(String name) {
+        for (Alarm ac : testAlarms.getAlarms()) {
+            if (ac.getName().equals(name)) {
+                testAlarms.getAlarms().remove(ac);
+                break;
+            }
         }
     }
 }

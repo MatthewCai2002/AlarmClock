@@ -10,7 +10,7 @@ and whether or not it has been solved
 public abstract class MathPuzzle {
 
     protected int range;
-    protected  int operatorRange;
+    protected int operatorRange;
     protected Boolean solved;
     protected int correctSolution;
     protected int num1;

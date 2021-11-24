@@ -3,10 +3,11 @@ package ui;
 import exceptions.InvalidDifficultyException;
 import model.Alarm;
 import model.Alarms;
+import model.Event;
+import model.EventLog;
 import model.PuzzleManager;
 import persistence.JsonReader;
 import persistence.JsonWriter;
-import puzzles.EasyMathPuzzle;
 import puzzles.MathPuzzle;
 
 import javax.swing.*;
@@ -33,7 +34,6 @@ public class AlarmAppUI extends JFrame {
     private Alarms alarms;
     private ClockUI clockUI;
     private PuzzleManager puzzleManager;
-    private MathPuzzle puzzle;
     private Boolean ringing;
     private Siren siren;
 
@@ -87,12 +87,9 @@ public class AlarmAppUI extends JFrame {
     private void initAlarm() {
         alarms = new Alarms();
         puzzleManager = new PuzzleManager();
-        puzzle = new EasyMathPuzzle();
         ringing = false;
         try {
             siren = new Siren();
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -194,20 +191,27 @@ public class AlarmAppUI extends JFrame {
             }
         });
         t.start();
-        puzzle.genRandomPuzzle();
-        String tempSol = JOptionPane.showInputDialog(
-                controlPanel, "solve " + puzzle.getProblem() + " to turn off the alarm");
+        String tempSolution = displayProblem();
         try {
-            int solution = Integer.parseInt(tempSol);
+            int solution = Integer.parseInt(tempSolution);
             checkSolved(solution);
             if (!ringing) {
                 t.stop();
             }
         } catch (NumberFormatException nfe) {
-            JOptionPane.showMessageDialog(controlPanel,
-                    "That was an invalid solution", "Error",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(controlPanel, "That was an invalid solution",
+                    "Error",JOptionPane.INFORMATION_MESSAGE);
             ringAlarm();
         }
+    }
+
+    // EFFECTS: helper that displays the current math problem in a panel
+    public String displayProblem() {
+        MathPuzzle puzzle = puzzleManager.getPuzzle();
+        puzzle.genRandomPuzzle();
+        String givenSolution = JOptionPane.showInputDialog(
+                controlPanel, "solve " + puzzle.getProblem() + " to turn off the alarm");
+        return givenSolution;
     }
 
     // inspired by SpaceInvaders
@@ -243,6 +247,7 @@ public class AlarmAppUI extends JFrame {
     //          if yes then it turns off the alarm
     //              otherwise it prompts to try again
     public void checkSolved(int solution) {
+        MathPuzzle puzzle = puzzleManager.getPuzzle();
         puzzle.solvePuzzle(solution);
         boolean solved = puzzle.isSolved();
         if (solved) {
@@ -326,6 +331,7 @@ public class AlarmAppUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             int index = list.getSelectedIndex();
             listModel.remove(index);
+            alarms.removeAlarmIndex(index - 1);
             if (listModel.size() == 0) {
                 this.setEnabled(false);
             } else if (index == listModel.getSize()) {
@@ -359,7 +365,6 @@ public class AlarmAppUI extends JFrame {
             if (difficulty != null) {
                 try {
                     puzzleManager.setPuzzle(difficulty);
-                    puzzle = puzzleManager.getPuzzle();
                     showImage("./data/Right.png",
                             "Successful Set Difficulty",
                             "Set difficulty to " + difficulty);
@@ -425,6 +430,9 @@ public class AlarmAppUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            for (Event ev : EventLog.getInstance()) {
+                System.out.println("\n" + ev.toString());
+            }
             System.exit(0);
         }
 
@@ -462,5 +470,9 @@ public class AlarmAppUI extends JFrame {
                     "unable to write to file in " + JSON_STORE_ALARMS,
                     "Successfully Saved",JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    public static void main(String[] args) {
+        new AlarmAppUI();
     }
 }
