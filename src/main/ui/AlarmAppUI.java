@@ -331,7 +331,7 @@ public class AlarmAppUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             int index = list.getSelectedIndex();
             listModel.remove(index);
-            alarms.removeAlarmIndex(index - 1);
+            alarms.removeAlarmIndex(index);
             if (listModel.size() == 0) {
                 this.setEnabled(false);
             } else if (index == listModel.getSize()) {

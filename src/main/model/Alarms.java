@@ -51,8 +51,8 @@ public class Alarms implements Writable {
     // MODIFIES: this
     // EFFECTS: removes alarm at given index
     public void removeAlarmIndex(int index) {
-        alarms.remove(index);
         Alarm alarm = alarms.get(index);
+        alarms.remove(index);
         EventLog.getInstance().logEvent(new Event("Removed Alarm: "
                 + alarm.getName() + "-" + alarm.getAlarmTime() + " from Alarms"));
     }
