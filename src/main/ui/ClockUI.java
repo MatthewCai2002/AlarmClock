@@ -9,6 +9,10 @@ import java.time.Clock;
 import java.util.Date;
 import javax.swing.Timer;
 
+/*
+    represents the clock display with the current system time
+ */
+
 public class ClockUI extends JPanel {
     private static final int WIDTH = 400;
     private static final int HEIGHT = 50;

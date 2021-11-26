@@ -20,6 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /*
     represents the GUI for the alarm app
@@ -402,8 +403,8 @@ public class AlarmAppUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                alarms = jsonReaderAlarms.readAlarms();
-                for (Alarm alarm : alarms.getAlarms()) {
+                for (Alarm alarm : jsonReaderAlarms.readAlarms().getAlarms()) {
+                    alarms.addAlarm(alarm);
                     addToAlarmsModel(alarm);
                 }
                 list.setSelectedIndex(0);

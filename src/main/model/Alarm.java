@@ -88,7 +88,7 @@ public class Alarm implements Writable {
         json.put("name", name);
         json.put("AlarmTimeHours", alarmTimeHours);
         json.put("AlarmTimeMinutes", alarmTimeMinutes);
-        EventLog.getInstance().logEvent(new Event("Saved Alarm: " + name + "-" + this.getAlarmTime()));
+        EventLog.getInstance().logEvent(new Event("Saved Alarm: " + name + ": " + this.getAlarmTime()));
         return json;
     }
 }

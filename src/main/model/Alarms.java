@@ -27,7 +27,7 @@ public class Alarms implements Writable {
     public void addAlarm(Alarm alarm) {
         alarms.add(alarm);
         EventLog.getInstance().logEvent(
-                new Event("Added Alarm: " + alarm.getName() + "-" + alarm.getAlarmTime() + " to Alarms"));
+                new Event("Added Alarm: " + alarm.getName() + ": " + alarm.getAlarmTime() + " to Alarms"));
     }
 
     // EFFECTS: if name is in alarms returns the alarm clock with given name
@@ -51,10 +51,13 @@ public class Alarms implements Writable {
     // MODIFIES: this
     // EFFECTS: removes alarm at given index
     public void removeAlarmIndex(int index) {
+        if (index == alarms.size()) {
+            index--;
+        }
         Alarm alarm = alarms.get(index);
         alarms.remove(index);
         EventLog.getInstance().logEvent(new Event("Removed Alarm: "
-                + alarm.getName() + "-" + alarm.getAlarmTime() + " from Alarms"));
+                + alarm.getName() + ": " + alarm.getAlarmTime() + " from Alarms"));
     }
 
     @Override
